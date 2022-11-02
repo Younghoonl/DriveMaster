@@ -12,6 +12,7 @@ int speed = 0;
 int carNumber;
 int item; // 현재 아이템
 int heart = 5; // 초기 목숨
+int gameTime = 0;
 
 void SetCurrentCursorPos(int x, int y){
     COORD position = { x, y };
@@ -85,8 +86,8 @@ void initScreen() {
 
 void eraseScreen() {
     SetCurrentCursorPos(9, 1);
-    for (int i = 0; i < 40; i++) {
-        for (int j = 0; j < 60; j++) {
+    for (int i = 0; i < 50; i++) {
+        for (int j = 0; j < 70; j++) {
             printf(" ");
         }
     }
@@ -199,7 +200,7 @@ void countMotion() {
 }
 
 void gameBoardInfo() {
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 23; i++) {
         SetCurrentCursorPos(60, 2 + i);
         printf("|");
     }
@@ -216,6 +217,8 @@ void gameBoardInfo() {
     SetCurrentCursorPos(62, 17);
     printf("SPEED : %d", speed);
     SetCurrentCursorPos(62, 19);
+    printf("SCORE : %d", score);
+    SetCurrentCursorPos(62, 21);
     printf("HEART ");
     for (int i = 0; i < heart; i++) {
         printf("♥");
@@ -223,10 +226,34 @@ void gameBoardInfo() {
     for (int i = 5; i > heart; i--) {
         printf("♡");
     }
+    SetCurrentCursorPos(62, 23);
+    printf("TIME : %d", gameTime);
+
+}
+void gameOver() {
+    SetCurrentCursorPos(25, 8);
+    for (int i = 0; i < 28; i++) {
+        printf("*");
+        Sleep(5);
+    }
+
+    SetCurrentCursorPos(25, 16);
+    for (int i = 0; i < 28; i++) {
+        printf("*");
+        Sleep(5);
+    }
+
+    SetCurrentCursorPos(33, 10);
+    printf("game over!");
+    SetCurrentCursorPos(30, 12);
+    printf("다시 도전하세요!");
+    SetCurrentCursorPos(29, 14);
+    printf("당신의 점수 : ", score);
 
 }
 
 int main() {
+    
     RemoveCursor();
     initScreen();
     int key;
@@ -239,5 +266,8 @@ int main() {
     eraseScreen();
     
     gameBoardInfo();
+    key = _getch();
+    eraseScreen();
+    gameOver();
     key = _getch();
 }
