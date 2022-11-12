@@ -1,49 +1,83 @@
+#define GBOARD_WIDTH 200
+#define GBOARD_HEIGHT 150
+
+extern char car[4][5][9];
 
 void initScreen() {
     /* 게임 이름 start 버튼 생성 */
-    SetCurrentCursorPos(9, 1);
+    int x = 10;
+    int y = 3;
+    SetCurrentCursorPos(x, y);
     printf("*");
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 80; i++) {
         printf("*");
         Sleep(5);
     }
     printf("*");
-    SetCurrentCursorPos(9, 11);
+    SetCurrentCursorPos(x, y+10);
     printf("*");
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 80; i++) {
         printf("*");
         Sleep(5);
     }
     printf("*");
-    SetCurrentCursorPos(9, 20);
+    SetCurrentCursorPos(x, y + 20);
     printf("*");
-    for (int i = 0; i < 60; i++) {
+    for (int i = 0; i < 80; i++) {
         printf("*");
         Sleep(5);
     }
     printf("*");
-    SetCurrentCursorPos(12, 3);
+    x += 14;
+    y -= 1;
+    SetCurrentCursorPos(x, y + 3);
     printf("* *       * * *       * * *   *           *  * * * * *");
-    SetCurrentCursorPos(12, 4);
+    SetCurrentCursorPos(x, y + 4);
     printf("*   *     *     *       *      *         *   *");
-    SetCurrentCursorPos(12, 5);
+    SetCurrentCursorPos(x, y + 5);
     printf("*     *   *     *       *       *       *    * ");
-    SetCurrentCursorPos(12, 6);
+    SetCurrentCursorPos(x, y + 6);
     printf("*     *   * * *         *        *     *     * * * * *   ");
-    SetCurrentCursorPos(12, 7);
+    SetCurrentCursorPos(x, y + 7);
     printf("*     *   *     *       *         *   *      *");
-    SetCurrentCursorPos(12, 8);
+    SetCurrentCursorPos(x, y + 8);
     printf("*   *     *       *     *          * *       * ");
-    SetCurrentCursorPos(12, 9);
+    SetCurrentCursorPos(x, y + 9);
     printf("* *       *        *  * * *         *        * * * * *");
     Sleep(100);
-    SetCurrentCursorPos(30, 14);
+    SetCurrentCursorPos(x+16, y + 13);
     //Sleep(1000);
     printf("**운 전 의 달 인**");
-    SetCurrentCursorPos(36, 16);
-    printf(" G O!");
-
-
+    SetCurrentCursorPos(x+30, 16);
+    int curPosX = 23;
+    int curPosY = 17;
+    for (y = 0; y < 5; y++) {
+        for (x = 0; x < 8; x++) {
+            SetCurrentCursorPos(curPosX + x, curPosY + y);
+            printf("%c", car[0][y][x]);
+        }
+    }
+    curPosX += 15;
+    for (y = 0; y < 5; y++) {
+        for (x = 0; x < 8; x++) {
+            SetCurrentCursorPos(curPosX + x, curPosY + y);
+            printf("%c", car[1][y][x]);
+        }
+    }
+    curPosX += 15;
+    for (y = 0; y < 5; y++) {
+        for (x = 0; x < 8; x++) {
+            SetCurrentCursorPos(curPosX + x, curPosY + y);
+            printf("%c", car[2][y][x]);
+        }
+    }
+    curPosX += 15;
+    for (y = 0; y < 5; y++) {
+        for (x = 0; x < 8; x++) {
+            SetCurrentCursorPos(curPosX + x, curPosY + y);
+            printf("%c", car[3][y][x]);
+        }
+    }
 }
 
 void eraseScreen() {
