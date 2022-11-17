@@ -1,26 +1,31 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <Windows.h>
 #include <time.h>
 #include "Car.h"
-#include<math.h>
-#include<conio.h>
+#include <math.h>
+#include <conio.h>
 
-double road[36][2];
-int road_idx = 0;
-int next_idx = 0;
+#define COMMAND_SIZE 256
+
+double road[44][2];
+
+char command[COMMAND_SIZE] = { '\0', };
 
 int curPosX = 25;
-int curPosY = 20;
+int curPosY = 25;
 
 char userName[30];
 int score = 0;
-int speed = 0;
+int speed = 100;
 int carNumber=0;
 int item; // 현재 아이템
 int heart = 5; // 초기 목숨
 int gameTime = 0;
 
+int lines = 45;
+int cols = 150;
 
 void SetCurrentCursorPos(int x, int y) {
     COORD position = { x, y };
@@ -45,56 +50,6 @@ void RemoveCursor() {
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &curInfo);
 }
 
-int gotoxy(int x, int y) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD pos;
-    pos.Y = y;
-    pos.X = x;
-    SetConsoleCursorPosition(hConsole, pos);
-    return 0;
-}
-
-
-void setRoad() {
-    double ly, ry;
-    double y;
-
-    for (int i = 0, j = 0; i < 360; j++, i += 10) {
-        y = sin(i * 3.14 / 180);
-
-        ly = y * 12 + 20.0;
-        ry = y * 12 + 45.0;
-
-        road[j][0] = ly;
-        road[j][1] = ry;
-    }
-}
-
-void show_road() {
-
-    gotoxy((int)road[(road_idx + 1) % 36][0], 1);
-    printf("  ");
-    gotoxy((int)road[(road_idx + 1) % 36][1], 1);
-    printf("  ");
-
-    if (road_idx == 0)
-        next_idx = 35;
-    else
-        next_idx = road_idx - 1;
-
-    for (int j = 1, i = road_idx; j < 37; i++, j++) {
-        i = i % 36;
-        gotoxy((int)road[i][0], j);
-        printf("*");
-        gotoxy((int)road[i][1], j);
-        printf("*");
-        Sleep(100);
-    }
-    road_idx = next_idx;
-}
-
-
-
 void gameInfoSelect() {
     /* 유저 이름, 자동차 선택 */
     int x = 10;
@@ -110,7 +65,6 @@ void gameInfoSelect() {
     }
     int curPosX = 23;
     int curPosY = 16;
- 
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
@@ -146,37 +100,53 @@ void gameInfoSelect() {
     }
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
     printf("[4]");
-    x = 10;
-    y = 3;
-    SetCurrentCursorPos(x+2, y+2);
+    x = 15;
+    y = 5;
+    SetCurrentCursorPos(x, y);
     printf("이름 : ");
     scanf("%s", &userName);
-    SetCurrentCursorPos(x+2, y+4);
+    SetCurrentCursorPos(x, y + 2);
+    printf("자동차를 골라보세요!");
+    SetCurrentCursorPos(x, y+4);
     printf("자동차 : ");
     scanf("%d", &carNumber);
+    if (carNumber > 5) {
+        carNumber = 1;
+    }
     carNumber--;
 }
 
 void gameBoardInfo() {
-    for (int i = 0; i < 23; i++) {
-        SetCurrentCursorPos(60, 2 + i);
+    int x, y;
+    x = 80;
+    y = 3;
+    for (int i = 0; i < 28; i++) {
+        SetCurrentCursorPos(x-3, 2 + i);
         printf("|");
     }
-    SetCurrentCursorPos(62, 3);
+    SetCurrentCursorPos(x, y);
     printf("<%s's GAME>", userName);
-    SetCurrentCursorPos(62, 5);
+    SetCurrentCursorPos(x, y+2);
     printf("---CAR---");
-    SetCurrentCursorPos(62, 10);
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 8; j++) {
+            SetCurrentCursorPos(j + x - 0.5, i + y+3);
+            printf("%c", car[carNumber][i][j]);
+        }
+    }
+    y += 8;
+    SetCurrentCursorPos(x, y);
     printf("---------");
-    SetCurrentCursorPos(62, 11);
+    SetCurrentCursorPos(x, y+2);
     printf("---ITEM---");
-    SetCurrentCursorPos(62, 15);
+    SetCurrentCursorPos(x, y+7);
     printf("----------");
-    SetCurrentCursorPos(62, 17);
+    SetCurrentCursorPos(x, y+9);
     printf("SPEED : %d", speed);
-    SetCurrentCursorPos(62, 19);
+    SetCurrentCursorPos(x, y + 11);
     printf("SCORE : %d", score);
-    SetCurrentCursorPos(62, 21);
+    SetCurrentCursorPos(x, y + 13);
     printf("HEART ");
     for (int i = 0; i < heart; i++) {
         printf("♥");
@@ -184,58 +154,124 @@ void gameBoardInfo() {
     for (int i = 5; i > heart; i--) {
         printf("♡");
     }
-    SetCurrentCursorPos(62, 23);
+    SetCurrentCursorPos(x, y + 15);
     printf("TIME : %d", gameTime);
-
 }
 
-void gameOver(int score) {
-    SetCurrentCursorPos(25, 8);
-    for (int i = 0; i < 28; i++) {
-        printf("*");
-        Sleep(5);
+int gotoxy(int x, int y) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos;
+    pos.Y = y;
+    pos.X = x;
+    SetConsoleCursorPosition(hConsole, pos);
+    return 0;
+}
+
+void setRoad() {
+
+    double ly, ry;
+    double y;
+
+    for (int i = 0, j = 0; i < 360; j++, i += 8) {
+        y = sin(i * 3.14 / 180);
+
+        ly = y * 20 + 20.0;
+        ry = y * 20 + 55.0;
+
+        road[j][0] = ly;
+        road[j][1] = ry;
     }
+}
 
-    SetCurrentCursorPos(25, 16);
-    for (int i = 0; i < 28; i++) {
+void show_road() {
+    int road_idx = 0;
+    int j;
+    int i, k;
+    
+    for (j = 0, i = road_idx; j < lines; i++, j++) {
+        i = i % lines;
+        gotoxy((int)road[i][0], j);
         printf("*");
-        Sleep(5);
+        gotoxy((int)road[i][1], j);
+        printf("*");
     }
+    Sleep(100);
+    for (j = 0, i = road_idx; j < lines; i++, j++) {
+        i = i % lines;
+        gotoxy((int)road[i][0], j);
+        printf(" ");
+        gotoxy((int)road[i][1], j);
+        printf(" ");
+    }
+    
 
-    SetCurrentCursorPos(33, 10);
-    printf("game over!");
-    SetCurrentCursorPos(30, 12);
-    printf("다시 도전하세요!");
-    SetCurrentCursorPos(29, 14);
-    printf("당신의 점수 : ", score);
+    road_idx++;
+    Sleep(speed);
 
+    while (1) {
+        
+        for (k = lines - road_idx, j = 0; j < lines; j++, k++) {
+            k = k % lines;
+            gotoxy(road[k][0], j);
+            printf("*");
+            gotoxy(road[k][1], j);
+            printf("*");
+        }
+        Sleep(speed);
+        for (k = lines - road_idx, j = 0; j < lines; j++, k++) {
+            k = k % lines;
+            gotoxy(road[k][0], j);
+            printf(" ");
+            gotoxy(road[k][1], j);
+            printf(" ");
+        }
+        road_idx++;
+       
+        if (road_idx > lines) {
+            road_idx = 1;
+            setRoad();
+        }
+        for (int i = 0; i < 20; i++) {
+            ProcessKeyInPut();
+           
+        }
+    }
 }
 
 
-int main() {
+
+
+
+int main() {    
+    sprintf(command, "mode con: lines=%d cols=%d", lines, cols);
+    system(command);
+
     
     RemoveCursor();
-    initScreen();
+    
+   // initScreen();
     int key;
     key = _getch();
-    eraseScreen();
-    gameInfoSelect();
-    
-    eraseScreen();
+   // eraseScreen();
+   // gameInfoSelect();
+
+    //eraseScreen();
     countMotion();
     eraseScreen();
     
     gameBoardInfo();
+    
     SetCurrentCursorPos(curPosX, curPosY);
     showCar(car[carNumber]);
-    setRoad();
-    show_road();
-    
     while (1) {
-        ProcessKeyInPut();
+        setRoad();
+        show_road();
+        
     }
+    
+
     gameOver(score);
-    key = _getch();
+    //key = _getch();
     
-    
+
 }

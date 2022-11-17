@@ -82,7 +82,7 @@ void initScreen() {
 
 void eraseScreen() {
     SetCurrentCursorPos(9, 1);
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 80; i++) {
         for (int j = 0; j < 70; j++) {
             printf(" ");
         }
@@ -92,88 +92,120 @@ void eraseScreen() {
 
 
 void countMotion() {
-    /* 게임 시작 전 3 - 2 - 1 재생 */
-
-    SetCurrentCursorPos(12, 4);
+    /* 게임 시작 전 READY 3 - 2 - 1 재생 */
+    int x, y;
+    x = 30;
+    y = 10;
+    int tmp = y;
+    SetCurrentCursorPos(x, y++);
     printf("* * *   * * *      *     * *     *     *");
-    SetCurrentCursorPos(12, 5);
+    SetCurrentCursorPos(x, y++);
     printf("*    *  *         * *    *   *    *   *");
-    SetCurrentCursorPos(12, 6);
+    SetCurrentCursorPos(x, y++);
     printf("* * *   * * *    * * *   *    *     *");
-    SetCurrentCursorPos(12, 7);
+    SetCurrentCursorPos(x, y++);
     printf("* *     *       *     *  *   *      *");
-    SetCurrentCursorPos(12, 8);
+    SetCurrentCursorPos(x, y++);
     printf("*    *  * * *  *       * * *        *");
-    Sleep(2000);
+    Sleep(1500);
     eraseScreen();
-    SetCurrentCursorPos(12, 4);
+    x = 40;
+    y = 6;
+    y = tmp;
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * ");
-    SetCurrentCursorPos(12, 5);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * * ");
-    SetCurrentCursorPos(12, 6);
+    SetCurrentCursorPos(x, y++);
     printf("          * *");
-    SetCurrentCursorPos(12, 7);
+    SetCurrentCursorPos(x, y++);
     printf("          * *");
-    SetCurrentCursorPos(12, 8);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * ");
-    SetCurrentCursorPos(12, 9);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * * ");
-    SetCurrentCursorPos(12, 10);
+    SetCurrentCursorPos(x, y++);
     printf("          * *");
-    SetCurrentCursorPos(12, 11);
+    SetCurrentCursorPos(x, y++);
     printf("          * *");
-    SetCurrentCursorPos(12, 12);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * *");
-    SetCurrentCursorPos(12, 13);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * *  ");
-    SetCurrentCursorPos(12, 15);
+    SetCurrentCursorPos(x, y++);
     Sleep(1000);
     eraseScreen();
-    SetCurrentCursorPos(12, 4);
+    y = tmp;
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * ");
-    SetCurrentCursorPos(12, 5);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * * ");
-    SetCurrentCursorPos(12, 6);
+    SetCurrentCursorPos(x, y++);
     printf("          * *");
-    SetCurrentCursorPos(12, 7);
+    SetCurrentCursorPos(x, y++);
     printf("         * *");
-    SetCurrentCursorPos(12, 8);
+    SetCurrentCursorPos(x, y++);
     printf("        * *");
-    SetCurrentCursorPos(12, 9);
+    SetCurrentCursorPos(x, y++);
     printf("      * *");
-    SetCurrentCursorPos(12, 10);
+    SetCurrentCursorPos(x, y++);
     printf("    * *");
-    SetCurrentCursorPos(12, 11);
+    SetCurrentCursorPos(x, y++);
     printf(" * *");
-    SetCurrentCursorPos(12, 12);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * * *");
-    SetCurrentCursorPos(12, 13);
+    SetCurrentCursorPos(x, y++);
     printf("* * * * * *  ");
-    SetCurrentCursorPos(12, 14);
+    SetCurrentCursorPos(x, y++);
     Sleep(1000);
     eraseScreen();
-    SetCurrentCursorPos(14, 4);
+    x += 2;
+    y = tmp;
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 5);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 6);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 7);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 8);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 9);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 10);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 11);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 12);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 13);
+    SetCurrentCursorPos(x, y++);
     printf("* *");
-    SetCurrentCursorPos(14, 14);
+    SetCurrentCursorPos(x, y++);
     Sleep(1000);
 
+
+}
+
+
+void gameOver(int score) {
+    SetCurrentCursorPos(25, 8);
+    for (int i = 0; i < 28; i++) {
+        printf("*");
+        Sleep(5);
+    }
+
+    SetCurrentCursorPos(25, 16);
+    for (int i = 0; i < 28; i++) {
+        printf("*");
+        Sleep(5);
+    }
+
+    SetCurrentCursorPos(33, 10);
+    printf("game over!");
+    SetCurrentCursorPos(30, 12);
+    printf("다시 도전하세요!");
+    SetCurrentCursorPos(29, 14);
+    printf("당신의 점수 : ", score);
 
 }

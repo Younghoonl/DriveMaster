@@ -1,42 +1,4 @@
-/*
-#include<stdio.h>
-#include<stdlib.h>
-#include<conio.h>
-#include<time.h>
-#include<Windows.h>
-#include<math.h>
-
-double road[36][2];
-int road_idx =0;
-int next_idx = 0;
-
-void show_road();
-void setRoad();
-int gotoxy(int x, int y);
-
-void main() 
-{
-	/*double y = 0;
-	int x, b, lblk, rblk;
-
-	while (1) {
-
-		for (x = 0; x <= 360; x += 10) {
-			y = sin(x * 3.14 / 180);
-
-			lblk = y * 12 + 20;
-
-			for (b = 0; b <= lblk; b++)
-				printf(" ");
-			printf("*                                *\n");
-			Sleep(100);
-			
-		}
-	}*/
-/*
-	setRoad();
-
-	
+z
 	show_road();
 
 }

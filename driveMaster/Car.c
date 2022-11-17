@@ -64,18 +64,18 @@ void ShiftRight() {
 
 void ProcessKeyInPut() {
     int key;
-
     if (_kbhit() != 0) {
         key = _getch();
         switch (key) {
         case LEFT:
-
             ShiftLeft();
             break;
         case RIGHT:
-
             ShiftRight();
             break;
+        default:
+            break;
         }
+       
     }
 }
