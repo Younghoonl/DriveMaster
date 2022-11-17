@@ -1,7 +1,4 @@
-z
-	show_road();
 
-}
 
 int gotoxy(int x, int y) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

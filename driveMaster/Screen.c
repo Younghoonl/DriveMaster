@@ -5,8 +5,8 @@ extern char car[4][5][9];
 
 void initScreen() {
     /* 게임 이름 start 버튼 생성 */
-    int x = 10;
-    int y = 3;
+    int x = 32;
+    int y = 8;
     SetCurrentCursorPos(x, y);
     printf("*");
     for (int i = 0; i < 80; i++) {
@@ -21,7 +21,7 @@ void initScreen() {
         Sleep(5);
     }
     printf("*");
-    SetCurrentCursorPos(x, y + 20);
+    SetCurrentCursorPos(x, y + 25);
     printf("*");
     for (int i = 0; i < 80; i++) {
         printf("*");
@@ -49,14 +49,15 @@ void initScreen() {
     //Sleep(1000);
     printf("**운 전 의 달 인**");
     SetCurrentCursorPos(x+30, 16);
-    int curPosX = 23;
-    int curPosY = 17;
+    int curPosX = 43;
+    int curPosY = 24;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
             printf("%c", car[0][y][x]);
         }
     }
+    Sleep(100);
     curPosX += 15;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
@@ -64,6 +65,7 @@ void initScreen() {
             printf("%c", car[1][y][x]);
         }
     }
+    Sleep(100);
     curPosX += 15;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
@@ -71,6 +73,7 @@ void initScreen() {
             printf("%c", car[2][y][x]);
         }
     }
+    Sleep(100);
     curPosX += 15;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
@@ -83,7 +86,7 @@ void initScreen() {
 void eraseScreen() {
     SetCurrentCursorPos(9, 1);
     for (int i = 0; i < 80; i++) {
-        for (int j = 0; j < 70; j++) {
+        for (int j = 0; j < 150; j++) {
             printf(" ");
         }
     }
@@ -94,8 +97,8 @@ void eraseScreen() {
 void countMotion() {
     /* 게임 시작 전 READY 3 - 2 - 1 재생 */
     int x, y;
-    x = 30;
-    y = 10;
+    x = 52;
+    y = 15;
     int tmp = y;
     SetCurrentCursorPos(x, y++);
     printf("* * *   * * *      *     * *     *     *");
@@ -109,8 +112,8 @@ void countMotion() {
     printf("*    *  * * *  *       * * *        *");
     Sleep(1500);
     eraseScreen();
-    x = 40;
-    y = 6;
+    x = 64;
+    y = 7;
     y = tmp;
     SetCurrentCursorPos(x, y++);
     printf("* * * * * * ");
@@ -131,7 +134,7 @@ void countMotion() {
     SetCurrentCursorPos(x, y++);
     printf("* * * * * * *");
     SetCurrentCursorPos(x, y++);
-    printf("* * * * * *  ");
+    printf("* * * * * * ");
     SetCurrentCursorPos(x, y++);
     Sleep(1000);
     eraseScreen();
@@ -155,7 +158,7 @@ void countMotion() {
     SetCurrentCursorPos(x, y++);
     printf("* * * * * * *");
     SetCurrentCursorPos(x, y++);
-    printf("* * * * * *  ");
+    printf("* * * * * * * ");
     SetCurrentCursorPos(x, y++);
     Sleep(1000);
     eraseScreen();
