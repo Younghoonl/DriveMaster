@@ -1,33 +1,49 @@
-#define GBOARD_WIDTH 200
-#define GBOARD_HEIGHT 150
+#define GBOARD_WIDTH 150
+#define GBOARD_HEIGHT 40
 
 extern char car[4][5][9];
 
 void initScreen() {
-    /* 게임 이름 start 버튼 생성 */
+    int ScreenX, ScreenY;
+    ScreenX = 4;
+    ScreenY = 1;
+    
+    SetCurrentCursorPos(ScreenX, ScreenY);
+    for (int i = 0; i < 142; i++) {
+        printf("*");
+        Sleep(1);
+    }
+    for (int i = ScreenY + 1; i < 38; i++) {
+        SetCurrentCursorPos(ScreenX + 141, i);
+        printf("*");
+        Sleep(1);
+    }
+    for (int i = 143; i > 4; i--) {
+        SetCurrentCursorPos(i, 37);
+        printf("*");
+        Sleep(1);
+    }
+    for (int i = 37; i > ScreenY; i--) {
+        SetCurrentCursorPos(ScreenX, i);
+        printf("*");
+        Sleep(1);
+    }
+    
+
+    SetCurrentCursorPos(41, 6);
+    for (int i = 0; i < 30; i++) {
+        printf("〓");
+    }
+    SetCurrentCursorPos(41, 16);
+    for (int i = 0; i < 30; i++) {
+        printf("〓");
+    }
+    
+
+    /* 게임 이름 start 버튼 생성  */
+    
     int x = 32;
-    int y = 8;
-    SetCurrentCursorPos(x, y);
-    printf("*");
-    for (int i = 0; i < 80; i++) {
-        printf("*");
-        Sleep(5);
-    }
-    printf("*");
-    SetCurrentCursorPos(x, y+10);
-    printf("*");
-    for (int i = 0; i < 80; i++) {
-        printf("*");
-        Sleep(5);
-    }
-    printf("*");
-    SetCurrentCursorPos(x, y + 25);
-    printf("*");
-    for (int i = 0; i < 80; i++) {
-        printf("*");
-        Sleep(5);
-    }
-    printf("*");
+    int y = 6;
     x += 14;
     y -= 1;
     SetCurrentCursorPos(x, y + 3);
@@ -192,23 +208,27 @@ void countMotion() {
 
 
 void gameOver(int score) {
-    SetCurrentCursorPos(25, 8);
+    int x = 58;
+    int y = 15;
+    SetCurrentCursorPos(x, y);
     for (int i = 0; i < 28; i++) {
         printf("*");
         Sleep(5);
     }
 
-    SetCurrentCursorPos(25, 16);
+    SetCurrentCursorPos(x, y+8);
     for (int i = 0; i < 28; i++) {
         printf("*");
         Sleep(5);
     }
 
-    SetCurrentCursorPos(33, 10);
+    SetCurrentCursorPos(x+8, y+2);
     printf("game over!");
-    SetCurrentCursorPos(30, 12);
+    SetCurrentCursorPos(x+6, y+4);
     printf("다시 도전하세요!");
-    SetCurrentCursorPos(29, 14);
+    SetCurrentCursorPos(x+2, y+6);
     printf("당신의 점수 : ", score);
+
+    SetCurrentCursorPos(x, y+10);
 
 }

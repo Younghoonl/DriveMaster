@@ -14,8 +14,8 @@ double road[44][2];
 
 char command[COMMAND_SIZE] = { '\0', };
 
-int curPosX = 25;
-int curPosY = 31;
+int curPosX = 28;
+int curPosY = 33;
 
 clock_t start;
 clock_t end;
@@ -28,7 +28,7 @@ int item; // 현재 아이템
 int heart = 5; // 초기 목숨
 int gameTime = 0;
 
-int lines = 40;
+int lines = 43;
 int cols = 150;
 
 void SetCurrentCursorPos(int x, int y) {
@@ -58,20 +58,38 @@ void gameInfoSelect() {
     /* 유저 이름, 자동차 선택 */
     int x = 32;
     int y = 8;
-    SetCurrentCursorPos(x, y);
-    for (int i = 0; i < 80; i++) {
+    int ScreenX, ScreenY;
+    ScreenX = 4;
+    ScreenY = 1;
+
+    SetCurrentCursorPos(ScreenX, ScreenY);
+    for (int i = 0; i < 142; i++) {
         printf("*");
     }
-    SetCurrentCursorPos(x, y + 25);
-    for (int i = 0; i < 80; i++) {
+    for (int i = ScreenY + 1; i < 38; i++) {
+        SetCurrentCursorPos(ScreenX + 141, i);
         printf("*");
     }
-    SetCurrentCursorPos(x, y + 12);
-    for (int i = 0; i < 80; i++) {
+    for (int i = 143; i > 4; i--) {
+        SetCurrentCursorPos(i, 37);
         printf("*");
     }
+    for (int i = 37; i > ScreenY; i--) {
+        SetCurrentCursorPos(ScreenX, i);
+        printf("*");
+    }
+    SetCurrentCursorPos(41, 20);
+    for (int i = 0; i < 30; i++) {
+        printf("〓");
+    }
+
+    SetCurrentCursorPos(38, 7);
+    for (int i = 0; i < 34; i++) {
+        printf("〓");
+    }
+
     int curPosX = 43;
-    int curPosY = 26;
+    int curPosY = 24;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
@@ -107,19 +125,19 @@ void gameInfoSelect() {
     }
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
     printf("[4]");
-    SetCurrentCursorPos(60, 10);
+    SetCurrentCursorPos(60, 7);
     printf("[정보를 입력하세요!]");
-    SetCurrentCursorPos(63, 22);
+    SetCurrentCursorPos(63, 20);
     printf("[자동차 종류]");
     x = 38;
-    y = 12;
+    y = 11;
     SetCurrentCursorPos(x, y);
     printf("이름 : ");
     SetCurrentCursorPos(x, y+3);
-    printf("자동차 : ");
+    printf("자동차 (1~4 중 선택) : ");
     SetCurrentCursorPos(x+7, y);
     scanf("%s", &userName);
-    SetCurrentCursorPos(x + 10, y+3);
+    SetCurrentCursorPos(x + 25, y+3);
     scanf("%d", &carNumber);
     if (carNumber > 5) {
         carNumber = 1;
@@ -187,121 +205,140 @@ void setRoad() {
         y = sin(i * 3.14 / 180);
 
         ly = y * 20 + 20.0;
-        ry = y * 20 + 55.0;
+        ry = y * 20 + 60.0;
 
         road[j][0] = ly+5; // 왼쪽부터 5 떨어짐
         road[j][1] = ry +10;
     }
 }
 
-showObstacle(int Obstacle[]) {
-    printf("%s", Obstacle);
+
+typedef struct ObstacleStruct {
+    int rN; // randomNumber
+    int x, y, k;
+}obstacle;
+
+typedef struct ItemStruct {
+    int x, y;
+}itemStruct;
+
+void showObstacles(obstacle ob[5]) {
+    for (int i = 0; i < 5; i++) {
+        if (ob[i].y > 40) {
+            continue;
+        }
+        int obX = ob[i].x + road[ob[i].k][0] +5;
+        int obY = ob[i].y % 45;
+        gotoxy(obX,obY);
+        printf("%s", Obstacles[ob[i].rN]);
+    }
+
 }
-deleteObstacle(int Obstacle[]) {
-    printf("%s", Obstacle);
+void deleteObstacles(obstacle ob[5]) {
+    for (int i = 0; i < 5; i++) {
+        if (ob[i].y > 40) {
+            continue;
+        }
+        int obX = ob[i].x + road[ob[i].k][0] + 5;
+        int obY = ob[i].y % 45;
+        gotoxy(obX, obY);
+        printf("%s", Obstacles[3]);
+    }
 }
+
+void showItem(itemStruct it) {
+    gotoxy(it.x, it.y);
+    if (it.y > 40) {
+        return;
+    }
+    printf("      %s           %s          %s", itemIcon, itemIcon, itemIcon); 
+
+}
+
+void deleteItem(itemStruct it) {
+    gotoxy(it.x, it.y);
+    if (it.y > 40) {
+        return;
+    } 
+    printf("                                 ");
+}
+
 
 void show_road() {
     int road_idx = 0;
     int j=0;
     int i, k=0;
-    //Sleep(speed);
     srand(time(NULL)); // 매번 다른 시드값 생성
-    int randomObstacle1 = rand() % 3; // 난수 생성
-    //int randomObstacle = 0;
-    int obstacleX1;
-    int obstacleY1=0;
-    int randomLocationX1 = rand() % 8;
 
-    int randomObstacle2 = rand() % 3; // 난수 생성
-    int obstacleX2;
-    int obstacleY2 = 15;
-    int randomLocationX2 = rand() % 8;
-
-    int itemX;
-    int itemY = 25;
-
+    obstacle ob[5];
+    for (int i = 0; i < 5; i++) {
+        ob[i].rN = rand() % 3;
+        ob[i].x = rand() % 25;
+        ob[i].y = rand() % 40;
+        if (ob[i].y == 1) {
+            ob[i].y++;
+        }
+        ob[i].k = ob[i].y;
+    }
+    
+    itemStruct it;
+    it.x = road[1][0];
+    it.y = j;
 
     while (1) {
+        showItem(it);
+        showObstacles(ob);
         for (k = 45 - road_idx, j = 0; j < 45; j++, k++) {
             k = k % 45;
-
-            if (k == 3) {
-                obstacleX1 = road[k][0] + randomLocationX1;
-                gotoxy(obstacleX1, obstacleY1);
-                showObstacle(Obstacles[randomObstacle1]);
-            }
-
-            if (k == 10) {
-                obstacleX2 = road[k][0] + randomLocationX2;
-                gotoxy(obstacleX2, obstacleY2);
-                showObstacle(Obstacles[randomObstacle2]);
-            }
-
-            if (k == 20) {
-                int itemX = road[k][0]+1;
-                gotoxy(itemX, itemY);
-                printf("%s       %s       %s", itemIcon, itemIcon, itemIcon);
-            }
             gotoxy(road[k][0], j);
             printf("*");
-            
             gotoxy(road[k][1], j);
             printf("*");
         }
 
         Sleep(speed);
-
-        //deleteObstacle(Obstacles[randomObstacle]);
+        deleteItem(it);
+        deleteObstacles(ob);
         for (k = 45 - road_idx, j = 0; j < 45; j++, k++) {
             k = k % 45;
-            if (k == 3) {
-                obstacleX1 = road[k][0] + randomLocationX1;
-                gotoxy(obstacleX1, obstacleY1);
-                deleteObstacle(Obstacles[7]);
-            }
-            if (k == 10) {
-                obstacleX2 = road[k][0] + randomLocationX2;
-                gotoxy(obstacleX2, obstacleY2);
-                deleteObstacle(Obstacles[7]);
-            }
-            if (k == 20) {
-                int itemX = road[k][0] + 1;
-                gotoxy(itemX, itemY);
-                printf("                       ");
-                 
-            }
             gotoxy(road[k][0], j);
             printf(" ");
-            
             gotoxy(road[k][1], j);
             printf(" ");
         }
         
-        obstacleY1++;
-        obstacleY2++;
-        itemY++;
-        for (int i = 0; i < 30; i++) {
+       
+        for (int i = 0; i < 50; i++) {
             ProcessKeyInPut();
         }
+
         end = clock();
         gameTime = (double)(end - start) / CLOCKS_PER_SEC; //초단위 변환
         gameBoardInfo();
+
         road_idx++;
+        for (int i = 0; i < 5; i++) {
+            ob[i].y++;
+            if (ob[i].y > 45) {
+                ob[i].y = 1;
+            }
+        }
+        it.y++;
+
+
         if (road_idx > 45) {
             road_idx = 1;
-            setRoad();
-            randomObstacle1 = rand() % 3;
-            obstacleY1 = 0;
-            randomLocationX1 = rand() % 8;
-
-            randomObstacle2 = rand() % 3;
-            obstacleY2 = 15;
-            randomLocationX2 = rand() % 8;
-
-            itemY = 25;
+            for (int i = 0; i < 5; i++) {
+                ob[i].rN = rand() % 3;
+                ob[i].x = rand() % 25;
+                ob[i].y = rand() % 37;
+                ob[i].k = ob[i].y;
+            }
+            it.x = road[1][0];
+            it.y = 1;
+            
         }
-        if (gameTime > 60) {
+        if (gameTime > 50) {
             break;
         }
     }
@@ -314,19 +351,20 @@ void show_road() {
 int main() {    
     sprintf(command, "mode con: lines=%d cols=%d", lines, cols);
     system(command);
-    
-    initScreen();
-    int key;
-    key = _getch();
-    eraseScreen();
-    gameInfoSelect();
     RemoveCursor();
-    eraseScreen();
-    countMotion();
-    eraseScreen();
+    
+    //initScreen();
+    int key;
+   // key = _getch();
+    //eraseScreen();
+    //gameInfoSelect();
+    
+    //eraseScreen();
+    //countMotion();
+    //eraseScreen();
     
     gameBoardInfo();
-   
+    
     SetCurrentCursorPos(curPosX, curPosY);
     start = clock();
     
@@ -334,6 +372,10 @@ int main() {
     setRoad();
     show_road();
     
+    
+    eraseScreen();
     gameOver(score);
+    key = _getch();
+    
 
 }
