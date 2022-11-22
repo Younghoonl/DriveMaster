@@ -32,6 +32,7 @@ void showCar(char carBlock[5][9]) {
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
+            textcolor(15, 0);
             printf("%c", carBlock[y][x]);
         }
 
