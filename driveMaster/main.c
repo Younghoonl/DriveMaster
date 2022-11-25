@@ -86,31 +86,28 @@ void setRoad() {
 
     for (int i = 0; i < 90; i++)
     {
-        road[i][0] = 20;
-        road[i][1] = 65;
+        road[i][0] = 25;
+        road[i][1] = 70;
     }
 
     for (int i = 0, j = 90; i < 1440; j++, i += 8) {
         y = sin(i * 3.14 / 180);
 
-        ly = y * 20 + 20.0-4;
-        ry = y * 20 + 60.0-3;
+        ly = y * 20 + 25.0;
+        ry = y * 20 + 70.0;
 
-        road[j][0] = ly + 5; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
-        road[j][1] = ry + 10;
+        road[j][0] = ly; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
+        road[j][1] = ry;
     }
 
-    for (int i = 270,  k=-1; i < 360; i++)
+    for (int i = 270,  k= 0 ; i < 360; i++)
     {
-        road[i][0] = 20 + k-1;
-        road[i][1] = 65 + k;
-        if (i < 293) k++;
+        road[i][0] = 25 + k;
+        road[i][1] = 70 + k;
+        if (i < 292) k++;
         else if (i >= 293 && i < 315) k--;
-        else if (i >= 315 && i < 338) k++;
-        else {
-            k--;
-        }
-        
+        else if (i >= 315 && i < 337) k++;
+        else if(i >= 338 && i < 360)  k--;
     }    
 }
 
