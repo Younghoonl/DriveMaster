@@ -7,7 +7,7 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-extern double road[44][2];
+extern double road[360][2];
 extern int item; 
 extern bool LeftRightChange;
 bool BoostChange = false;
@@ -62,11 +62,11 @@ void deleteObstacles(obstacle ob[5]) {
 
 
 void showItem(itemStruct it) {
-    if (it.y > 40) {
+    if (it.y > 44) {
         return;
     }
     
-    for (int i = 1; i <= 3; i++) {
+    for (int i = 0; i <= 2; i++) {
         gotoxy(it.x + 15 * i, it.y);
         printf("%s", itemIcon);
     }
