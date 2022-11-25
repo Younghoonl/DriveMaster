@@ -58,6 +58,8 @@ clock_t itemTimeEnd;
 int lines = 43;
 int cols = 150;
 
+int tmp = 0; // 충돌 위한 임시 변수 -> 36 + tmp%360
+
 typedef struct ObstacleStruct {
     int rN; // randomNumber
     int x, y, k;
@@ -77,6 +79,19 @@ int gotoxy(int x, int y) {
     return 0;
 }
 
+int detectcollisionroad(int carPosX) {
+    if (carPosX - 4 < road[curPosY + tmp][0]) {
+        printf("%d collistion!", curPosY+tmp);
+        ShiftRight();
+        return 1;
+    }
+    else if (carPosX + 10 > road[curPosY + tmp][1]) {
+        printf("%d collistion!", curPosY+tmp);
+        ShiftLeft();
+        return 1;
+    }
+    else return 0;
+}
 
 
 void setRoad() {
@@ -110,7 +125,6 @@ void setRoad() {
         else {
             k--;
         }
-        
     }    
 }
 
@@ -159,13 +173,13 @@ void show_road() {
             gotoxy(road[k][1], j);
             printf(" ");
         }
-
+        
 
         for (int i = 0; i < 100; i++) {
             ProcessKeyInPut();
         }
         itemTimeEnd = clock();
-        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0) {
+        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 8.0) {
             LeftRightChange = false;
             BoostChange = false;
             CarChange = false;
@@ -177,6 +191,7 @@ void show_road() {
         gameBoardInfo();
 
         road_idx++;
+        tmp--;
         for (int i = 0; i < 5; i++) {
             ob[i].y++;
             if (ob[i].y > 44) {
