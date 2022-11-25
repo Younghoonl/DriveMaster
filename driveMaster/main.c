@@ -46,7 +46,7 @@ char userName[30];
 int score = 0;
 int speed = 100;
 int carNumber=0;
-int item = 0; // 현재 아이템
+int item = 3; // 현재 아이템
 int heart = 5; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
@@ -77,15 +77,7 @@ int gotoxy(int x, int y) {
     return 0;
 }
 
-double straightRoad[88][2];
 
-void setStraightRoad() {
-    for (int i = 0; i < 44; i++)
-    {
-        straightRoad[i][0] = 20;
-        straightRoad[i][1] = 60;
-    }
-}
 
 void setRoad() {
 
@@ -145,8 +137,10 @@ void show_road() {
     it.y = j;
     int degree = 360;
     while (1) {
+        showCar(car[carNumber]);
         showItem(it);
         showObstacles(ob);
+        textcolor(WHITE, BLACK);
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
             gotoxy(road[k][0], j);
@@ -167,10 +161,17 @@ void show_road() {
         }
 
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             ProcessKeyInPut();
         }
-
+        itemTimeEnd = clock();
+        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0) {
+            LeftRightChange = false;
+            BoostChange = false;
+            CarChange = false;
+            speed = 100;
+            carNumber = tmpCarNumber;
+        }
         end = clock();
         gameTime = (double)(end - start) / CLOCKS_PER_SEC; //초단위 변환
         gameBoardInfo();
