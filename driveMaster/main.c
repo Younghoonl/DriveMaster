@@ -6,6 +6,7 @@
 #include "Car.h"
 #include <math.h>
 #include <conio.h>
+#include <stdbool.h>
 
 
 #define COMMAND_SIZE 256
@@ -34,6 +35,10 @@ char command[COMMAND_SIZE] = { '\0', };
 int curPosX = 28;
 int curPosY = 36;
 
+extern bool LeftRightChange;
+extern bool BoostChange;
+extern bool CarChange;
+
 clock_t start;
 clock_t end;
 
@@ -41,9 +46,14 @@ char userName[30];
 int score = 0;
 int speed = 100;
 int carNumber=0;
-int item; // 현재 아이템
+int item = 0; // 현재 아이템
 int heart = 5; // 초기 목숨
 int gameTime = 0;
+int tmpCarNumber;
+
+clock_t itemTimeStart;
+clock_t itemTimeEnd;
+
 
 int lines = 43;
 int cols = 150;
@@ -129,6 +139,16 @@ void show_road() {
         for (int i = 0; i < 100; i++) {
             ProcessKeyInPut();
         }
+
+        itemTimeEnd = clock();
+        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0 ) {
+            LeftRightChange = false;
+            BoostChange = false;
+            CarChange = false;
+            speed = 100;
+            carNumber = tmpCarNumber;
+        }
+
         end = clock();
         gameTime = (double)(end - start) / CLOCKS_PER_SEC; //초단위 변환
         gameBoardInfo();
@@ -141,7 +161,6 @@ void show_road() {
             }
         }
         it.y++;
-
 
         if (road_idx > 45) {
             road_idx = 1;
@@ -184,8 +203,7 @@ int main() {
     showCar(car[carNumber]);
     setRoad();
     show_road();
-    
-
+   
     eraseScreen();
     gameOver(score);
     key = _getch();

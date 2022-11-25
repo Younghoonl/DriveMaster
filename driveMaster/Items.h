@@ -9,5 +9,6 @@ char Obstacles[10][9] = {
 
 char itemIcon[3] = "ⓘ";
 
+
 char coin[3] = "Ⓒ";
 

@@ -1,15 +1,26 @@
 #pragma once
 #include <Windows.h>
+#include <stdbool.h>
+#include <time.h>
+
 
 #define LEFT 75
 #define RIGHT 77
+#define SPACE 32
 
 extern int curPosX;
 extern int curPosY;
 extern int carNumber;
 extern char car[4][5][9];
 
+extern clock_t itemTimeStart;
+extern clock_t itemTimeEnd;
+
+extern void useItem();
+
 static COORD curPos;
+
+bool LeftRightChange = false;
 
 static void SetCurrentCursorPos(int x, int y) {
     COORD position = { x, y };
@@ -69,10 +80,24 @@ void ProcessKeyInPut() {
         key = _getch();
         switch (key) {
         case LEFT:
-            ShiftLeft();
+            if (LeftRightChange == false) {
+                ShiftLeft();
+            }
+            else {
+                ShiftRight();
+            }
             break;
         case RIGHT:
-            ShiftRight();
+            if (LeftRightChange == false) {
+                ShiftRight();               
+            }
+            else {
+                ShiftLeft();
+            }
+            break;
+        case SPACE:
+            useItem();
+            itemTimeStart = clock();
             break;
         default:
             break;

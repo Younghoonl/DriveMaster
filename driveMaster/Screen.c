@@ -13,6 +13,7 @@ extern int speed;
 extern int item; // 현재 아이템
 extern int heart; // 초기 목숨
 extern int gameTime;
+extern int tmpCarNumber;
 
 void SetCurrentCursorPos(int x, int y) {
     COORD position = { x, y };
@@ -46,6 +47,12 @@ void gameBoardInfo() {
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 8; j++) {
             SetCurrentCursorPos(j + x, i + y + 3);
+            printf("  ");
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 8; j++) {
+            SetCurrentCursorPos(j + x, i + y + 3);
             printf("%c", car[carNumber][i][j]);
         }
     }
@@ -54,12 +61,14 @@ void gameBoardInfo() {
     printf("---------");
     SetCurrentCursorPos(x, y + 2);
     printf("---ITEM---");
+    SetCurrentCursorPos(x, y + 3);
+    printf("%d", item);
     SetCurrentCursorPos(x, y + 7);
     printf("----------");
     SetCurrentCursorPos(x, y + 9);
-    printf("SPEED : %d", speed);
+    printf("SPEED : %d    ", speed);
     SetCurrentCursorPos(x, y + 11);
-    printf("SCORE : %d", score);
+    printf("SCORE : %d     ", score);
     SetCurrentCursorPos(x, y + 13);
     printf("HEART ");
     for (int i = 0; i < heart; i++) {
@@ -161,6 +170,7 @@ int gameInfoSelect() {
         carNumber = 1;
     }
     carNumber--;
+    tmpCarNumber = carNumber;
     return carNumber;
 }
 
