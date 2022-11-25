@@ -28,7 +28,7 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-double road[88][2];
+double road[360][2];
 
 char command[COMMAND_SIZE] = { '\0', };
 
@@ -77,26 +77,49 @@ int gotoxy(int x, int y) {
     return 0;
 }
 
+double straightRoad[88][2];
+
+void setStraightRoad() {
+    for (int i = 0; i < 44; i++)
+    {
+        straightRoad[i][0] = 20;
+        straightRoad[i][1] = 60;
+    }
+}
+
 void setRoad() {
 
     double ly, ry;
     double y;
 
-    for (int i = 0; i < 44; i++)
+    for (int i = 0; i < 90; i++)
     {
         road[i][0] = 20;
-        road[i][1] = 60;
+        road[i][1] = 65;
     }
 
-    for (int i = 0, j = 44; i < 360; j++, i += 8) {
+    for (int i = 0, j = 90; i < 1440; j++, i += 8) {
         y = sin(i * 3.14 / 180);
 
-        ly = y * 20 + 20.0;
-        ry = y * 20 + 60.0;
+        ly = y * 20 + 20.0-4;
+        ry = y * 20 + 60.0-3;
 
         road[j][0] = ly + 5; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
         road[j][1] = ry + 10;
     }
+
+    for (int i = 270,  k=-1; i < 360; i++)
+    {
+        road[i][0] = 20 + k-1;
+        road[i][1] = 65 + k;
+        if (i < 293) k++;
+        else if (i >= 293 && i < 315) k--;
+        else if (i >= 315 && i < 338) k++;
+        else {
+            k--;
+        }
+        
+    }    
 }
 
 
@@ -120,12 +143,12 @@ void show_road() {
     itemStruct it;
     it.x = road[1][0];
     it.y = j;
-
+    int degree = 360;
     while (1) {
         showItem(it);
         showObstacles(ob);
-        for (k = 87 - road_idx, j = 0; j < 44; j++, k++) {
-            k = k % 87;
+        for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
+            k = k % degree;
             gotoxy(road[k][0], j);
             printf("*");
             gotoxy(road[k][1], j);
@@ -135,8 +158,8 @@ void show_road() {
         Sleep(speed);
         deleteItem(it);
         deleteObstacles(ob);
-        for (k = 87 - road_idx, j = 0; j < 44; j++, k++) {
-            k = k % 87;
+        for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
+            k = k % degree;
             gotoxy(road[k][0], j);
             printf(" ");
             gotoxy(road[k][1], j);
@@ -162,8 +185,8 @@ void show_road() {
         it.y++;
 
 
-        if (road_idx > 87) {
-            road_idx = 1;
+        if (road_idx > degree) {
+            road_idx = 0;
             for (int i = 0; i < 5; i++) {
                 ob[i].rN = rand() % 3;
                 ob[i].x = rand() % 25;
@@ -192,7 +215,7 @@ int main() {
     //carNumber = gameInfoSelect();
 
     eraseScreen();
-    countMotion();
+    //countMotion();
     eraseScreen();
     
     gameBoardInfo();
