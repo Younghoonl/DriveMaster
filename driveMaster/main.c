@@ -211,11 +211,9 @@ void show_road() {
             }
             it.x = road[1][0];
             it.y = 1;
+        }
 
-        }/*
-        if (gameTime > 50) {
-            break;
-        }*/
+       
     }
 }
 
