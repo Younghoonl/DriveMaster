@@ -28,7 +28,7 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-double road[44][2];
+double road[88][2];
 
 char command[COMMAND_SIZE] = { '\0', };
 
@@ -78,24 +78,32 @@ int gotoxy(int x, int y) {
 }
 
 void setRoad() {
+
     double ly, ry;
     double y;
 
-    for (int i = 0, j = 0; i < 360; j++, i += 8) {
+    for (int i = 0; i < 44; i++)
+    {
+        road[i][0] = 20;
+        road[i][1] = 60;
+    }
+
+    for (int i = 0, j = 44; i < 360; j++, i += 8) {
         y = sin(i * 3.14 / 180);
 
         ly = y * 20 + 20.0;
-        ry = y * 20 + 70.0;
+        ry = y * 20 + 60.0;
 
-        road[j][0] = ly+5; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
-        road[j][1] = ry +10;
+        road[j][0] = ly + 5; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
+        road[j][1] = ry + 10;
     }
 }
 
+
 void show_road() {
     int road_idx = 0;
-    int j=0;
-    int i, k=0;
+    int j = 0;
+    int i, k = 0;
     srand(time(NULL)); // ¸Å¹ø ´Ù¸¥ ½Ãµå°ª »ý¼º
 
     obstacle ob[5];
@@ -108,18 +116,16 @@ void show_road() {
         }
         ob[i].k = ob[i].y;
     }
-    
+
     itemStruct it;
     it.x = road[1][0];
     it.y = j;
 
     while (1) {
-        showCar(car[carNumber]);
         showItem(it);
         showObstacles(ob);
-        textcolor(WHITE, BLACK);
-        for (k = 45 - road_idx, j = 0; j < 45; j++, k++) {
-            k = k % 45;
+        for (k = 87 - road_idx, j = 0; j < 44; j++, k++) {
+            k = k % 87;
             gotoxy(road[k][0], j);
             printf("*");
             gotoxy(road[k][1], j);
@@ -129,24 +135,17 @@ void show_road() {
         Sleep(speed);
         deleteItem(it);
         deleteObstacles(ob);
-        for (k = 45 - road_idx, j = 0; j < 45; j++, k++) {
-            k = k % 45;
+        for (k = 87 - road_idx, j = 0; j < 44; j++, k++) {
+            k = k % 87;
             gotoxy(road[k][0], j);
             printf(" ");
             gotoxy(road[k][1], j);
             printf(" ");
         }
-        for (int i = 0; i < 100; i++) {
-            ProcessKeyInPut();
-        }
 
-        itemTimeEnd = clock();
-        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0 ) {
-            LeftRightChange = false;
-            BoostChange = false;
-            CarChange = false;
-            speed = 100;
-            carNumber = tmpCarNumber;
+
+        for (int i = 0; i < 50; i++) {
+            ProcessKeyInPut();
         }
 
         end = clock();
@@ -156,13 +155,14 @@ void show_road() {
         road_idx++;
         for (int i = 0; i < 5; i++) {
             ob[i].y++;
-            if (ob[i].y > 45) {
+            if (ob[i].y > 44) {
                 ob[i].y = 1;
             }
         }
         it.y++;
 
-        if (road_idx > 45) {
+
+        if (road_idx > 87) {
             road_idx = 1;
             for (int i = 0; i < 5; i++) {
                 ob[i].rN = rand() % 3;
@@ -172,11 +172,11 @@ void show_road() {
             }
             it.x = road[1][0];
             it.y = 1;
-            
-        }
+
+        }/*
         if (gameTime > 50) {
             break;
-        }
+        }*/
     }
 }
 
@@ -185,11 +185,11 @@ int main() {
     system(command);
     RemoveCursor();
     
-    initScreen();
+    //initScreen();
     int key;
-    key = _getch();
-    eraseScreen();
-    carNumber = gameInfoSelect();
+    //key = _getch();
+    //eraseScreen();
+    //carNumber = gameInfoSelect();
 
     eraseScreen();
     countMotion();
