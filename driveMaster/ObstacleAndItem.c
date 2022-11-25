@@ -38,8 +38,8 @@ void showObstacles(obstacle ob[5]) {
         if (ob[i].y > 40) {
             continue;
         }
-        int obX = ob[i].x + road[ob[i].k][0] + 5;
-        int obY = ob[i].y % 45;
+        int obX = ob[i].x + road[ob[i].k][0] + 15;
+        int obY = ob[i].y;
         gotoxy(obX, obY);
         textcolor(YELLOW, BLACK);
         printf("%s", Obstacles[ob[i].rN]);
@@ -53,8 +53,8 @@ void deleteObstacles(obstacle ob[5]) {
         if (ob[i].y > 40) {
             continue;
         }
-        int obX = ob[i].x + road[ob[i].k][0] + 5;
-        int obY = ob[i].y % 45;
+        int obX = ob[i].x + road[ob[i].k][0] + 15;
+        int obY = ob[i].y;
         gotoxy(obX, obY);
         printf("%s", Obstacles[3]);
     }
@@ -67,7 +67,7 @@ void showItem(itemStruct it) {
     }
     
     for (int i = 0; i <= 2; i++) {
-        gotoxy(it.x + 15 * i, it.y);
+        gotoxy(it.x + 18 * i, it.y);
         printf("%s", itemIcon);
     }
 }
@@ -79,7 +79,7 @@ void deleteItem(itemStruct it) {
     }
     
     for (int i = 1; i <= 3; i++) {
-        gotoxy(it.x + 15 * i, it.y);
+        gotoxy(it.x + 18 * i, it.y);
         printf("   ", itemIcon);
     }
 }

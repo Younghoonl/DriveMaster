@@ -139,16 +139,14 @@ void show_road() {
     for (int i = 0; i < 5; i++) {
         ob[i].rN = rand() % 3;
         ob[i].x = rand() % 25;
-        ob[i].y = rand() % 40;
-        if (ob[i].y == 1) {
-            ob[i].y++;
-        }
+        ob[i].y = rand() % 20+1;
         ob[i].k = ob[i].y;
     }
 
     itemStruct it;
     it.x = road[1][0];
-    it.y = j;
+    it.y = 0;
+
     int degree = 360;
     while (1) {
         showCar(car[carNumber]);
@@ -160,7 +158,7 @@ void show_road() {
             gotoxy(road[k][0], j);
             printf("*");
             gotoxy(road[k][1], j);
-            printf("*");
+            printf("* %d",k);
         }
 
         Sleep(speed);
@@ -171,7 +169,7 @@ void show_road() {
             gotoxy(road[k][0], j);
             printf(" ");
             gotoxy(road[k][1], j);
-            printf(" ");
+            printf("    ");
         }
         
 
@@ -194,23 +192,24 @@ void show_road() {
         tmp--;
         for (int i = 0; i < 5; i++) {
             ob[i].y++;
-            if (ob[i].y > 44) {
-                ob[i].y = 1;
-            }
+            
         }
         it.y++;
 
-
-        if (road_idx > degree) {
-            road_idx = 0;
+        if (road_idx % 45==0) {
             for (int i = 0; i < 5; i++) {
                 ob[i].rN = rand() % 3;
                 ob[i].x = rand() % 25;
-                ob[i].y = rand() % 37;
+                ob[i].y = rand() % 20 + 1;
                 ob[i].k = ob[i].y;
             }
             it.x = road[1][0];
-            it.y = 1;
+            it.y = 0;
+        }
+
+        if (road_idx > degree) {
+            road_idx = 0;
+            
         }
 
        

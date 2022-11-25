@@ -80,8 +80,7 @@ void ProcessKeyInPut() {
         key = _getch();
         switch (key) {
         case LEFT:
-            if (detectcollisionroad(curPosX) == 1)
-                return;
+            
             if (LeftRightChange == false) {
                 ShiftLeft();
             }
@@ -90,8 +89,7 @@ void ProcessKeyInPut() {
             }
             break;
         case RIGHT:
-            if (detectcollisionroad(curPosX) == 1)
-                return;
+            
             if (LeftRightChange == false) {
                 ShiftRight();               
             }
