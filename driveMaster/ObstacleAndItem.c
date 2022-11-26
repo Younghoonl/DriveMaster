@@ -3,13 +3,15 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define BLACK 0 
+#define BLACK 0
+#define RED 4
 #define YELLOW 14 
 #define WHITE 15 
 
 extern double road[360][3];
 extern int item;
 extern bool LeftRightChange;
+extern bool using;
 bool BoostChange = false;
 bool CarChange = false;
 extern int speed;
@@ -38,8 +40,9 @@ void textcolor(int foreground, int background)
 
 void showObstacles1(obstacle ob) {
     
+    textcolor(RED, BLACK);
     printf("%s", Obstacles[ob.rN]);
-
+    textcolor(WHITE, BLACK);
 }
 
 
@@ -54,9 +57,11 @@ void deleteObstacles1() {
 void showItem(itemStruct it) {
   
     for (int i = 0; i < 4; i++) {
+        textcolor(YELLOW, BLACK);
         if(i < 3) printf("%s      ", itemIcon); // space 7°³
         else      printf("%s", itemIcon);
     }
+    textcolor(WHITE, BLACK);
  
 }
 
@@ -92,8 +97,6 @@ void useItem() {
         CarChange = true;
         carNumber = 4;
     }
-    item = 0;
-
-
-
+    
+    using = true;
 }

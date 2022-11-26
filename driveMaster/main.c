@@ -37,9 +37,9 @@
 #define OB8 111
 #define OB9 151
 
-#define ITEM 171
+#define ITEM 173
 
-
+int flag = 0;
 double road[360][3];
 
 char command[COMMAND_SIZE] = { '\0', };
@@ -50,6 +50,7 @@ int curPosY = 36;
 extern bool LeftRightChange;
 extern bool BoostChange;
 extern bool CarChange;
+bool using = false;
 
 
 clock_t start;
@@ -64,8 +65,8 @@ int heart = 5; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
 
-clock_t itemTimeStart;
-clock_t itemTimeEnd;
+clock_t itemTimeStart = 0;
+clock_t itemTimeEnd = 0;
 
 int tmpCycle[8] = { 0,315,270,225,180,135,90,45};
 int tmpC = 0;
@@ -173,12 +174,11 @@ void show_road() {
     ob3[2].x = 38;
 
     itemStruct it;
-    it.x = 10;
+    it.x = 7;
     
 
     int roadPos = tmpCycle[tmpC] + curPosY;
 
-    it.x = 7;
     
     int degree = 360;
     while (1) {
@@ -188,7 +188,9 @@ void show_road() {
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
             gotoxy(road[k][0], j);
+            textcolor(GREEN, BLACK);
             printf("*");
+            textcolor(WHITE, BLACK);
             int obstacleX = 0;
             int itemX = 0;
             tmp = road[k][1];
@@ -240,9 +242,11 @@ void show_road() {
             }
 
             if ((tmp>=1&&tmp<=9) && k==roadPos) {
+                flag = 0;
                 int p = (obstacleX - curPosX);
                 p = p > 0 ? p : -p;
                 if (p<7) {
+                    flag = 1;
                     heart--;
                     if (heart == 0) {
                         return;
@@ -250,16 +254,19 @@ void show_road() {
                 }
             }
             if (tmp == 10 && k == roadPos) {
-                item = rand() % 3 + 1;
+                item = rand()%3+1;
+                gameBoardInfo();
                 if (item == 1) {
                     // key 변환
+                    using = true;
                     LeftRightChange = true;
                     itemTimeStart = clock();
-                    item = 0;
                 }
             }
             gotoxy(road[k][2], j);
+            textcolor(GREEN, BLACK);
             printf("*");
+            textcolor(WHITE, BLACK);
             
         }
 
@@ -321,12 +328,14 @@ void show_road() {
         }
 
         itemTimeEnd = clock();
-        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0) {
+        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 5.0 && using == true) {
             LeftRightChange = false;
             BoostChange = false;
             CarChange = false;
             speed = 100;
             carNumber = tmpCarNumber;
+            item = 0;
+            using = false;
         }
         end = clock();
         gameTime = (double)(end - start) / CLOCKS_PER_SEC; //초단위 변환
@@ -342,10 +351,9 @@ void show_road() {
         if (road_idx > degree) {
             road_idx = 0;
             it.x = road[1][0];
-            it.y = 1;
         }
 
-        if (gameTime == 120) {
+        if (gameTime >= 100) {
             return;
         }
     }

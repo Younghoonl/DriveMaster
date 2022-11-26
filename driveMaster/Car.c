@@ -19,6 +19,7 @@ typedef struct ObstacleStruct {
     int x;
 }obstacle;
 
+extern int flag;
 extern clock_t itemTimeStart;
 extern clock_t itemTimeEnd;
 
@@ -49,7 +50,10 @@ void showCar(char carBlock[5][9]) {
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
+            if(flag ==0)
             textcolor(15, 0);
+            if(flag ==1)
+            textcolor(4, 0);
             printf("%c", carBlock[y][x]);
         }
 

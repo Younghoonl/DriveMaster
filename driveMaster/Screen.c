@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <stdio.h>
 
+
 #define GBOARD_WIDTH 150
 #define GBOARD_HEIGHT 40
 
@@ -14,6 +15,7 @@ extern int item; // 현재 아이템
 extern int heart; // 초기 목숨
 extern int gameTime;
 extern int tmpCarNumber;
+extern char Itemshape[3][3][15];
 
 void SetCurrentCursorPos(int x, int y) {
     COORD position = { x, y };
@@ -62,7 +64,12 @@ void gameBoardInfo() {
     SetCurrentCursorPos(x, y + 2);
     printf("---ITEM---");
     SetCurrentCursorPos(x, y + 3);
-    printf("%d", item);
+    //printf("%d", item);
+    for (int i = 0; i < 3; i++) {
+        SetCurrentCursorPos(x, y + 3 + i);
+        printf("%s ", Itemshape[item][i]);
+    }
+
     SetCurrentCursorPos(x, y + 7);
     printf("----------");
     SetCurrentCursorPos(x, y + 9);
