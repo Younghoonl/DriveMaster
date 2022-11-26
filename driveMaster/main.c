@@ -8,7 +8,6 @@
 #include <conio.h>
 #include <stdbool.h>
 
-
 #define COMMAND_SIZE 256
 
 #define BLACK 0 
@@ -36,12 +35,13 @@ double road[360][3];
 
 char command[COMMAND_SIZE] = { '\0', };
 
-int curPosX = 28;
+int curPosX = 35;
 int curPosY = 36;
 
 extern bool LeftRightChange;
 extern bool BoostChange;
 extern bool CarChange;
+
 
 clock_t start;
 clock_t end;
@@ -58,6 +58,8 @@ int tmpCarNumber;
 clock_t itemTimeStart;
 clock_t itemTimeEnd;
 
+int tmpCycle[8] = { 0,315,270,225,180,135,90,45 };
+int tmpC = 0;
 
 int lines = 43;
 int cols = 150;
@@ -80,8 +82,6 @@ int gotoxy(int x, int y) {
     SetConsoleCursorPosition(hConsole, pos);
     return 0;
 }
-
-
 
 void setRoad() {
 
@@ -148,10 +148,12 @@ void show_road() {
     ob3.rN = 2;
     ob3.x = 25;
 
-
     itemStruct it;
     it.x = road[1][0];
     it.y = j;
+
+    int roadPos = tmpCycle[tmpC] + curPosY;
+
     int degree = 360;
     while (1) {
         showCar(car[carNumber]);
@@ -198,11 +200,17 @@ void show_road() {
             gotoxy(road[k][2], j);
             printf(" ");
         }
-
+        detectcollisionRoad(roadPos);
 
         for (int i = 0; i < 100; i++) {
-            ProcessKeyInPut();
+            ProcessKeyInPut(roadPos);
         }
+
+        roadPos--;
+        if (roadPos <= 0) {
+            roadPos = 360;
+        }
+
         itemTimeEnd = clock();
         if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 10.0) {
             LeftRightChange = false;
@@ -217,15 +225,16 @@ void show_road() {
 
         road_idx++;
        
-
-
+        if (road_idx % 45 == 0) {
+            tmpC++;
+            tmpC = tmpC % 8;
+            roadPos = tmpCycle[tmpC] + curPosY;
+        }
         if (road_idx > degree) {
             road_idx = 0;
             it.x = road[1][0];
             it.y = 1;
         }
-
-
     }
 }
 

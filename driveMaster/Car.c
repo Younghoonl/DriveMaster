@@ -12,12 +12,17 @@ extern int curPosX;
 extern int curPosY;
 extern int carNumber;
 extern char car[4][5][9];
+extern double road[360][3];
+
+typedef struct ObstacleStruct {
+    int rN;
+    int x;
+}obstacle;
 
 extern clock_t itemTimeStart;
 extern clock_t itemTimeEnd;
 
 extern void useItem();
-
 
 static COORD curPos;
 
@@ -61,13 +66,14 @@ void DeleteCar(char carBlock[5][9]) {
     }
 }
 
-
 void ShiftLeft() {
+    
     DeleteCar(car[carNumber]);
     curPosX -= 2;
     SetCurrentCursorPos(curPosX, curPosY);
     showCar(car[carNumber]);
 }
+
 void ShiftRight() {
     DeleteCar(car[carNumber]);
     curPosX += 2;
@@ -75,13 +81,32 @@ void ShiftRight() {
     showCar(car[carNumber]);
 }
 
-void ProcessKeyInPut() {
+int detectcollisionRoad(int roadPos) {
+    if (curPosX  < road[roadPos][0]) {
+        ShiftRight();
+        return 1;
+    }
+    else if (curPosX + 9 > road[roadPos][2]) {
+        ShiftLeft();
+        return 1;
+    }
+    return 0;
+}
+
+int detectcollisionObstacle() {
+    
+    return 0;
+}
+
+void ProcessKeyInPut(int roadPos) {
     int key;
     if (_kbhit() != 0) {
         key = _getch();
         switch (key) {
         case LEFT:
-           
+            if (detectcollisionRoad(roadPos) == 1) {
+                return;
+            }
             if (LeftRightChange == false) {
                 ShiftLeft();
             }
@@ -90,7 +115,9 @@ void ProcessKeyInPut() {
             }
             break;
         case RIGHT:
-            
+            if (detectcollisionRoad(roadPos) == 1) {
+                return;
+            }
             if (LeftRightChange == false) {
                 ShiftRight();               
             }
