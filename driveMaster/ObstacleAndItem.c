@@ -38,7 +38,7 @@ void showObstacles(obstacle ob[5]) {
         if (ob[i].y > 40) {
             continue;
         }
-        int obX = ob[i].x + road[ob[i].k][0] + 15;
+        int obX = ob[i].x + road[ob[i].k][0] + 5;
         int obY = ob[i].y;
         gotoxy(obX, obY);
         textcolor(YELLOW, BLACK);
@@ -53,7 +53,7 @@ void deleteObstacles(obstacle ob[5]) {
         if (ob[i].y > 40) {
             continue;
         }
-        int obX = ob[i].x + road[ob[i].k][0] + 15;
+        int obX = ob[i].x + road[ob[i].k][0] + 5;
         int obY = ob[i].y;
         gotoxy(obX, obY);
         printf("%s", Obstacles[3]);
@@ -62,12 +62,12 @@ void deleteObstacles(obstacle ob[5]) {
 
 
 void showItem(itemStruct it) {
-    if (it.y > 44) {
+    if (it.y > 40) {
         return;
     }
     
-    for (int i = 0; i <= 2; i++) {
-        gotoxy(it.x + 18 * i, it.y);
+    for (int i = 0; i <=2; i++) {
+        gotoxy(it.x + 13 * i+10, it.y);
         printf("%s", itemIcon);
     }
 }
@@ -78,8 +78,8 @@ void deleteItem(itemStruct it) {
         return;
     }
     
-    for (int i = 1; i <= 3; i++) {
-        gotoxy(it.x + 18 * i, it.y);
+    for (int i = 0; i <= 2; i++) {
+        gotoxy(it.x + 13 * i + 10, it.y);
         printf("   ", itemIcon);
     }
 }
@@ -96,10 +96,6 @@ void useItem() {
     */
     if (item == 0) {
         return; // 아무 일도 일어나지 않음
-    }
-    else if (item == 1) {
-        // key 변환
-        LeftRightChange = true;
     }
     else if (item == 2) {
         // 부스터
