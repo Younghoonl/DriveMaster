@@ -25,7 +25,7 @@ typedef struct ObstacleStruct {
 }obstacle;
 
 typedef struct ItemStruct {
-    int x, y;
+    int x;
 }itemStruct;
 
 void textcolor(int foreground, int background)
@@ -52,26 +52,18 @@ void deleteObstacles1() {
 
 
 void showItem(itemStruct it) {
-    if (it.y > 44) {
-        return;
+  
+    for (int i = 0; i < 3; i++) {
+        if(i < 2) printf("%s       ", itemIcon);
+        else      printf("%s", itemIcon);
     }
-
-    for (int i = 0; i <= 2; i++) {
-        gotoxy(it.x + 15 * i, it.y);
-        printf("%s", itemIcon);
-    }
+ 
 }
 
-void deleteItem(itemStruct it) {
+void deleteItem() {
 
-    if (it.y > 40) {
-        return;
-    }
-
-    for (int i = 1; i <= 3; i++) {
-        gotoxy(it.x + 15 * i, it.y);
-        printf("   ", itemIcon);
-    }
+    printf("                       ");
+   
 }
 
 

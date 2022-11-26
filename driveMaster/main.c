@@ -38,6 +38,8 @@
 #define OB8 111
 #define OB9 151
 
+#define ITEM 171
+
 
 double road[360][3];
 
@@ -97,7 +99,8 @@ void setRoad() {
     int obNum;
 
     for (int i = 0; i < 360; i++) {
-        if (i % OB1 == 0)      road[i][1] = 1;
+        if (i % ITEM == 0)     road[i][1] = 10;    //item 
+        else if (i % OB1 == 0) road[i][1] = 1;
         else if (i % OB2 == 0) road[i][1] = 2;
         else if (i % OB3 == 0) road[i][1] = 3;
         else if (i % OB4 == 0) road[i][1] = 4;
@@ -171,12 +174,12 @@ void show_road() {
 
 
     itemStruct it;
-    it.x = road[1][0];
-    it.y = j;
+    it.x = 9;
+    
     int degree = 360;
     while (1) {
         showCar(car[carNumber]);
-        showItem(it);
+       
         textcolor(WHITE, BLACK);
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
@@ -212,6 +215,9 @@ void show_road() {
                      break;
             case 9:  gotoxy(road[k][0] + ob3[2].x, j);
                      showObstacles1(ob3[2]);
+                     break;
+            case 10: gotoxy(road[k][0] + it.x, j);
+                     showItem(it);
                      break;
             default:
                 break;
@@ -281,6 +287,9 @@ void show_road() {
                      break;
             case 9:  gotoxy(road[k][0] + ob3[2].x, j);
                      deleteObstacles1();
+                     break;
+            case 10: gotoxy(road[k][0] + it.x, j);
+                     deleteItem();
                      break;
             default:
                 break;
