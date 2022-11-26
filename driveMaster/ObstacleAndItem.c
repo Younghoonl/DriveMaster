@@ -7,7 +7,7 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-extern double road[360][2];
+extern double road[360][3];
 extern int item; 
 extern bool LeftRightChange;
 bool BoostChange = false;
@@ -18,9 +18,14 @@ extern int carNumber;
 extern clock_t itemTimeStart;
 extern clock_t itemTimeEnd;
 
+//typedef struct ObstacleStruct {
+//    int rN; // randomNumber
+//    int x, y, k;
+//}obstacle;
+
 typedef struct ObstacleStruct {
     int rN; // randomNumber
-    int x, y, k;
+    int x;
 }obstacle;
 
 typedef struct ItemStruct {
@@ -33,31 +38,51 @@ void textcolor(int foreground, int background)
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-void showObstacles(obstacle ob[5]) {
-    for (int i = 0; i < 5; i++) {
-        if (ob[i].y > 40) {
+//void showObstacles(obstacle ob[5]) {
+//    for (int i = 0; i < 5; i++) {
+//        if (ob[i].y > 40) {
+//            continue;
+//        }
+//        int obX = ob[i].x + road[ob[i].k][0] + 5;
+//        int obY = ob[i].y % 45;
+//        gotoxy(obX, obY);
+//        textcolor(YELLOW, BLACK);
+//        printf("%s", Obstacles[ob[i].rN]);
+//    }
+//
+//}
+
+void showObstacles1(obstacle ob) {
+   /* for (int i = 0; i < 5; i++) {
+        if (ob > 40) {
             continue;
         }
         int obX = ob[i].x + road[ob[i].k][0] + 5;
         int obY = ob[i].y % 45;
         gotoxy(obX, obY);
-        textcolor(YELLOW, BLACK);
-        printf("%s", Obstacles[ob[i].rN]);
-    }
+        textcolor(YELLOW, BLACK);*/
+        printf("%s", Obstacles[ob.rN]);
 
 }
 
 
-void deleteObstacles(obstacle ob[5]) {
-    for (int i = 0; i < 5; i++) {
-        if (ob[i].y > 40) {
-            continue;
-        }
-        int obX = ob[i].x + road[ob[i].k][0] + 5;
-        int obY = ob[i].y % 45;
-        gotoxy(obX, obY);
+//void deleteObstacles1(obstacle ob) {
+//    for (int i = 0; i < 5; i++) {
+//        if (ob[i].y > 40) {
+//            continue;
+//        }
+//        int obX = ob[i].x + road[ob[i].k][0] + 5;
+//        int obY = ob[i].y % 45;
+//        gotoxy(obX, obY);
+//        printf("%s", Obstacles[3]);
+//    }
+//    
+//}
+
+void deleteObstacles1(obstacle ob) {
+    
         printf("%s", Obstacles[3]);
-    }
+
 }
 
 

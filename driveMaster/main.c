@@ -28,7 +28,11 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-double road[360][2];
+#define OB1 17
+#define OB2 31
+#define OB3 11
+
+double road[360][3];
 
 char command[COMMAND_SIZE] = { '\0', };
 
@@ -58,9 +62,14 @@ clock_t itemTimeEnd;
 int lines = 43;
 int cols = 150;
 
+//typedef struct ObstacleStruct {
+//    int rN; // randomNumber
+//    int x, y, k;
+//}obstacle;
+
 typedef struct ObstacleStruct {
     int rN; // randomNumber
-    int x, y, k;
+    int x;
 }obstacle;
 
 typedef struct ItemStruct {
@@ -87,7 +96,12 @@ void setRoad() {
     for (int i = 0; i < 90; i++)
     {
         road[i][0] = 25;
-        road[i][1] = 70;
+        if (i % OB1 == 0) road[i][1] = 1;
+        else if (i % OB2 == 0) road[i][1] = 2;
+        else if (i % OB3 == 0) road[i][1] = 3;
+        else road[i][1] = 0;
+    
+        road[i][2] = 70;
     }
 
     for (int i = 0, j = 90; i < 1440; j++, i += 8) {
@@ -97,17 +111,27 @@ void setRoad() {
         ry = y * 20 + 70.0;
 
         road[j][0] = ly; // ¿ÞÂÊºÎÅÍ 5 ¶³¾îÁü
-        road[j][1] = ry;
+        road[j][2] = ry;
+
+        if (j % OB1 == 0) road[j][1] = 1;
+        else if (j % OB2 == 0) road[j][1] = 2;
+        else if (j % OB3 == 0) road[j][1] = 3;
+        else road[j][1] = 0;
     }
 
     for (int i = 270,  k= 0 ; i < 360; i++)
     {
         road[i][0] = 25 + k;
-        road[i][1] = 70 + k;
+        road[i][2] = 70 + k;
         if (i < 292) k++;
         else if (i >= 293 && i < 315) k--;
         else if (i >= 315 && i < 337) k++;
         else if(i >= 338 && i < 360)  k--;
+
+        if (i % OB1 == 0) road[i][1] = 1;
+        else if (i % OB2 == 0) road[i][1] = 2;
+        else if (i % OB3 == 0) road[i][1] = 3;
+        else road[i][1] = 0;
     }    
 }
 
@@ -118,7 +142,7 @@ void show_road() {
     int i, k = 0;
     srand(time(NULL)); // ¸Å¹ø ´Ù¸¥ ½Ãµå°ª »ý¼º
 
-    obstacle ob[5];
+    /*obstacle ob[5];
     for (int i = 0; i < 5; i++) {
         ob[i].rN = rand() % 3;
         ob[i].x = rand() % 25;
@@ -127,7 +151,20 @@ void show_road() {
             ob[i].y++;
         }
         ob[i].k = ob[i].y;
-    }
+    }*/
+
+    obstacle ob1;
+    ob1.rN = 0;
+    ob1.x = 5;
+
+    obstacle ob2;
+    ob2.rN = 1;
+    ob2.x = 15;
+
+    obstacle ob3;
+    ob3.rN = 2;
+    ob3.x = 25;
+
 
     itemStruct it;
     it.x = road[1][0];
@@ -136,24 +173,48 @@ void show_road() {
     while (1) {
         showCar(car[carNumber]);
         showItem(it);
-        showObstacles(ob);
+       /* showObstacles(ob);*/
         textcolor(WHITE, BLACK);
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
             gotoxy(road[k][0], j);
             printf("*");
-            gotoxy(road[k][1], j);
+            if (road[k][1] == 1) {
+                gotoxy(road[k][0] + ob1.x, j);
+                showObstacles1(ob1);
+            }
+            else if(road[k][1] == 2) {
+                gotoxy(road[k][0] + ob2.x, j);
+                showObstacles1(ob2);
+            }
+            else if (road[k][1] == 3) {
+                gotoxy(road[k][0] + ob3.x, j);
+                showObstacles1(ob3);
+            }
+            gotoxy(road[k][2], j);
             printf("*");
         }
 
         Sleep(speed);
         deleteItem(it);
-        deleteObstacles(ob);
+       /* deleteObstacles1(ob);*/
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
             gotoxy(road[k][0], j);
             printf(" ");
-            gotoxy(road[k][1], j);
+            if (road[k][1] == 1) {
+                gotoxy(road[k][0] + ob1.x, j);
+                deleteObstacles1(ob1);
+            }
+            else if (road[k][1] == 2) {
+                gotoxy(road[k][0] + ob2.x, j);
+                deleteObstacles1(ob2);
+            }
+            else if (road[k][1] == 3) {
+                gotoxy(road[k][0] + ob3.x, j);
+                deleteObstacles1(ob3);
+            }
+            gotoxy(road[k][2], j);
             printf(" ");
         }
 
@@ -174,23 +235,23 @@ void show_road() {
         gameBoardInfo();
 
         road_idx++;
-        for (int i = 0; i < 5; i++) {
+       /* for (int i = 0; i < 5; i++) {
             ob[i].y++;
             if (ob[i].y > 44) {
                 ob[i].y = 1;
             }
         }
-        it.y++;
+        it.y++;*/
 
 
         if (road_idx > degree) {
             road_idx = 0;
-            for (int i = 0; i < 5; i++) {
+           /* for (int i = 0; i < 5; i++) {
                 ob[i].rN = rand() % 3;
                 ob[i].x = rand() % 25;
                 ob[i].y = rand() % 37;
                 ob[i].k = ob[i].y;
-            }
+            }*/
             it.x = road[1][0];
             it.y = 1;
         }
