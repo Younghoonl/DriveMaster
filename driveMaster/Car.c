@@ -93,10 +93,6 @@ int detectcollisionRoad(int roadPos) {
     return 0;
 }
 
-int detectcollisionObstacle() {
-    
-    return 0;
-}
 
 void ProcessKeyInPut(int roadPos) {
     int key;

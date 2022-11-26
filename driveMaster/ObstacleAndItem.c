@@ -53,8 +53,8 @@ void deleteObstacles1() {
 
 void showItem(itemStruct it) {
   
-    for (int i = 0; i < 3; i++) {
-        if(i < 2) printf("%s       ", itemIcon);
+    for (int i = 0; i < 4; i++) {
+        if(i < 3) printf("%s      ", itemIcon); // space 7°³
         else      printf("%s", itemIcon);
     }
  
@@ -62,7 +62,7 @@ void showItem(itemStruct it) {
 
 void deleteItem() {
 
-    printf("                       ");
+    printf("                             ");
    
 }
 

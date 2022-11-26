@@ -59,7 +59,7 @@ char userName[30];
 int score = 0;
 int speed = 100;
 int carNumber = 0;
-int item = 3; // 현재 아이템
+int item = 0; // 현재 아이템
 int heart = 5; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
@@ -70,7 +70,7 @@ clock_t itemTimeEnd;
 int tmpCycle[8] = { 0,315,270,225,180,135,90,45};
 int tmpC = 0;
 
-int lines = 45;
+int lines = 43;
 int cols = 150;
 
 typedef struct ObstacleStruct {
@@ -99,7 +99,7 @@ void setRoad() {
     int obNum;
 
     for (int i = 0; i < 360; i++) {
-        if (i % ITEM == 0)     road[i][1] = 10;    //item 
+        if (i % ITEM == 0 && i!=0)     road[i][1] = 10;    //item 
         else if (i % OB1 == 0) road[i][1] = 1;
         else if (i % OB2 == 0) road[i][1] = 2;
         else if (i % OB3 == 0) road[i][1] = 3;
@@ -173,12 +173,12 @@ void show_road() {
     ob3[2].x = 38;
 
     itemStruct it;
-    it.x = road[1][0];
-    it.y = j;
+    it.x = 10;
+    
 
     int roadPos = tmpCycle[tmpC] + curPosY;
 
-    it.x = 9;
+    it.x = 7;
     
     int degree = 360;
     while (1) {
@@ -190,7 +190,9 @@ void show_road() {
             gotoxy(road[k][0], j);
             printf("*");
             int obstacleX = 0;
+            int itemX = 0;
             tmp = road[k][1];
+
             switch (tmp) {
             case 0:  break;
             case 1:  gotoxy(road[k][0] + ob1[0].x, j);
@@ -231,10 +233,12 @@ void show_road() {
                      break;
             case 10: gotoxy(road[k][0] + it.x, j);
                      showItem(it);
+                     itemX = road[k][0] + it.x;
                      break;
             default:
                 break;
             }
+
             if ((tmp>=1&&tmp<=9) && k==roadPos) {
                 int p = (obstacleX - curPosX);
                 p = p > 0 ? p : -p;
@@ -245,9 +249,18 @@ void show_road() {
                     }
                 }
             }
-         
+            if (tmp == 10 && k == roadPos) {
+                item = rand() % 3 + 1;
+                if (item == 1) {
+                    // key 변환
+                    LeftRightChange = true;
+                    itemTimeStart = clock();
+                    item = 0;
+                }
+            }
             gotoxy(road[k][2], j);
             printf("*");
+            
         }
 
         Sleep(speed);
@@ -330,6 +343,10 @@ void show_road() {
             road_idx = 0;
             it.x = road[1][0];
             it.y = 1;
+        }
+
+        if (gameTime == 120) {
+            return;
         }
     }
 }
