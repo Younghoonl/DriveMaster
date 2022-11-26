@@ -44,7 +44,7 @@ void showObstacles1(obstacle ob) {
 
 
 
-void deleteObstacles1(obstacle ob) {
+void deleteObstacles1() {
 
     printf("%s", Obstacles[3]);
 
