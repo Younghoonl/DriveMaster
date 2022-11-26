@@ -182,6 +182,7 @@ void RemoveCursor() {
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &curInfo);
 }
 
+
 void initScreen() {
     int ScreenX, ScreenY;
     ScreenX = 4;
@@ -286,7 +287,6 @@ void eraseScreen() {
         }
     }
 }
-
 
 
 void countMotion() {
