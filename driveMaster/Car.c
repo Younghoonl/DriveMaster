@@ -18,6 +18,7 @@ extern clock_t itemTimeEnd;
 
 extern void useItem();
 
+
 static COORD curPos;
 
 bool LeftRightChange = false;
@@ -80,8 +81,7 @@ void ProcessKeyInPut() {
         key = _getch();
         switch (key) {
         case LEFT:
-            if (detectcollisionroad() == 1)
-                return;
+           
             if (LeftRightChange == false) {
                 ShiftLeft();
             }
@@ -90,8 +90,7 @@ void ProcessKeyInPut() {
             }
             break;
         case RIGHT:
-            if (detectcollisionroad() == 1)
-                return;
+            
             if (LeftRightChange == false) {
                 ShiftRight();               
             }

@@ -7,8 +7,8 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-extern double road[360][2];
-extern int item; 
+extern double road[360][3];
+extern int item;
 extern bool LeftRightChange;
 bool BoostChange = false;
 bool CarChange = false;
@@ -18,9 +18,10 @@ extern int carNumber;
 extern clock_t itemTimeStart;
 extern clock_t itemTimeEnd;
 
+
 typedef struct ObstacleStruct {
     int rN; // randomNumber
-    int x, y, k;
+    int x;
 }obstacle;
 
 typedef struct ItemStruct {
@@ -33,41 +34,30 @@ void textcolor(int foreground, int background)
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-void showObstacles(obstacle ob[5]) {
-    for (int i = 0; i < 5; i++) {
-        if (ob[i].y > 40) {
-            continue;
-        }
-        int obX = ob[i].x + road[ob[i].k][0] + 5;
-        int obY = ob[i].y;
-        gotoxy(obX, obY);
-        textcolor(YELLOW, BLACK);
-        printf("%s", Obstacles[ob[i].rN]);
-    }
+
+
+void showObstacles1(obstacle ob) {
+    
+    printf("%s", Obstacles[ob.rN]);
 
 }
 
 
-void deleteObstacles(obstacle ob[5]) {
-    for (int i = 0; i < 5; i++) {
-        if (ob[i].y > 40) {
-            continue;
-        }
-        int obX = ob[i].x + road[ob[i].k][0] + 5;
-        int obY = ob[i].y;
-        gotoxy(obX, obY);
-        printf("%s", Obstacles[3]);
-    }
+
+void deleteObstacles1(obstacle ob) {
+
+    printf("%s", Obstacles[3]);
+
 }
 
 
 void showItem(itemStruct it) {
-    if (it.y > 40) {
+    if (it.y > 44) {
         return;
     }
-    
-    for (int i = 0; i <=2; i++) {
-        gotoxy(it.x + 13 * i+10, it.y);
+
+    for (int i = 0; i <= 2; i++) {
+        gotoxy(it.x + 15 * i, it.y);
         printf("%s", itemIcon);
     }
 }
@@ -77,9 +67,9 @@ void deleteItem(itemStruct it) {
     if (it.y > 40) {
         return;
     }
-    
-    for (int i = 0; i <= 2; i++) {
-        gotoxy(it.x + 13 * i + 10, it.y);
+
+    for (int i = 1; i <= 3; i++) {
+        gotoxy(it.x + 15 * i, it.y);
         printf("   ", itemIcon);
     }
 }
@@ -96,6 +86,10 @@ void useItem() {
     */
     if (item == 0) {
         return; // 아무 일도 일어나지 않음
+    }
+    else if (item == 1) {
+        // key 변환
+        LeftRightChange = true;
     }
     else if (item == 2) {
         // 부스터
