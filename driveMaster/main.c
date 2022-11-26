@@ -28,9 +28,16 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-#define OB1 17
-#define OB2 31
-#define OB3 11
+#define OB1 33
+#define OB2 73
+#define OB3 141
+#define OB4 59
+#define OB5 41
+#define OB6 131
+#define OB7 71
+#define OB8 111
+#define OB9 151
+
 
 double road[360][3];
 
@@ -59,7 +66,7 @@ clock_t itemTimeStart;
 clock_t itemTimeEnd;
 
 
-int lines = 43;
+int lines = 45;
 int cols = 150;
 
 typedef struct ObstacleStruct {
@@ -87,15 +94,25 @@ void setRoad() {
 
     double ly, ry;
     double y;
+    int obNum;
+
+    for (int i = 0; i < 360; i++) {
+        if (i % OB1 == 0)      road[i][1] = 1;
+        else if (i % OB2 == 0) road[i][1] = 2;
+        else if (i % OB3 == 0) road[i][1] = 3;
+        else if (i % OB4 == 0) road[i][1] = 4;
+        else if (i % OB5 == 0) road[i][1] = 5;
+        else if (i % OB6 == 0) road[i][1] = 6;
+        else if (i % OB7 == 0) road[i][1] = 7;
+        else if (i % OB8 == 0) road[i][1] = 8;
+        else if (i % OB9 == 0) road[i][1] = 9;
+        else  road[i][1] = 0;
+    }
+    
 
     for (int i = 0; i < 90; i++)
     {
         road[i][0] = 25;
-        if (i % OB1 == 0) road[i][1] = 1;
-        else if (i % OB2 == 0) road[i][1] = 2;
-        else if (i % OB3 == 0) road[i][1] = 3;
-        else road[i][1] = 0;
-
         road[i][2] = 70;
     }
 
@@ -107,11 +124,6 @@ void setRoad() {
 
         road[j][0] = ly; 
         road[j][2] = ry;
-
-        if (j % OB1 == 0) road[j][1] = 1;
-        else if (j % OB2 == 0) road[j][1] = 2;
-        else if (j % OB3 == 0) road[j][1] = 3;
-        else road[j][1] = 0;
     }
 
     for (int i = 270, k = 0; i < 360; i++)
@@ -122,11 +134,6 @@ void setRoad() {
         else if (i >= 293 && i < 315) k--;
         else if (i >= 315 && i < 337) k++;
         else if (i >= 338 && i < 360)  k--;
-
-        if (i % OB1 == 0) road[i][1] = 1;
-        else if (i % OB2 == 0) road[i][1] = 2;
-        else if (i % OB3 == 0) road[i][1] = 3;
-        else road[i][1] = 0;
     }
 }
 
@@ -135,18 +142,32 @@ void show_road() {
     int road_idx = 0;
     int j = 0;
     int i, k = 0;
+    int tmp;
     srand(time(NULL)); 
-    obstacle ob1;
-    ob1.rN = 0;
-    ob1.x = 5;
 
-    obstacle ob2;
-    ob2.rN = 1;
-    ob2.x = 15;
+    obstacle ob1[3];
+    ob1[0].rN = 0;
+    ob1[1].rN = 0;
+    ob1[2].rN = 0;
+    ob1[0].x = 5;
+    ob1[1].x = 25;
+    ob1[2].x = 40;
 
-    obstacle ob3;
-    ob3.rN = 2;
-    ob3.x = 25;
+    obstacle ob2[3];
+    ob2[0].rN = 1;
+    ob2[1].rN = 1;
+    ob2[2].rN = 1;
+    ob2[0].x = 8;
+    ob2[1].x = 28;
+    ob2[2].x = 38;
+
+    obstacle ob3[3];
+    ob3[0].rN = 2;
+    ob3[1].rN = 2;
+    ob3[2].rN = 2;
+    ob3[0].x = 10;
+    ob3[1].x = 30;
+    ob3[2].x = 38;
 
 
     itemStruct it;
@@ -161,7 +182,43 @@ void show_road() {
             k = k % degree;
             gotoxy(road[k][0], j);
             printf("*");
-            if (road[k][1] == 1) {
+
+            tmp = road[k][1];
+            switch (tmp) {
+            case 0:  break;
+            case 1:  gotoxy(road[k][0] + ob1[0].x, j);
+                     showObstacles1(ob1[0]);
+                     break;
+            case 2:  gotoxy(road[k][0] + ob1[1].x, j);
+                     showObstacles1(ob1[1]);
+                     break;
+            case 3:  gotoxy(road[k][0] + ob1[2].x, j);
+                     showObstacles1(ob1[2]);
+                     break;
+            case 4:  gotoxy(road[k][0] + ob2[0].x, j);
+                     showObstacles1(ob2[0]);
+                     break;
+            case 5:  gotoxy(road[k][0] + ob2[1].x, j);
+                     showObstacles1(ob2[1]);
+                     break;
+            case 6:  gotoxy(road[k][0] + ob2[2].x, j);
+                     showObstacles1(ob2[2]); 
+                     break;
+            case 7:  gotoxy(road[k][0] + ob3[0].x, j);
+                     showObstacles1(ob3[0]);
+                     break;
+            case 8:  gotoxy(road[k][0] + ob3[1].x, j);
+                     showObstacles1(ob3[1]);
+                     break;
+            case 9:  gotoxy(road[k][0] + ob3[2].x, j);
+                     showObstacles1(ob3[2]);
+                     break;
+            default:
+                break;
+            }
+
+           /* if (road[k][1] == 1) {
+                if()
                 gotoxy(road[k][0] + ob1.x, j);
                 showObstacles1(ob1);
             }
@@ -172,7 +229,7 @@ void show_road() {
             else if (road[k][1] == 3) {
                 gotoxy(road[k][0] + ob3.x, j);
                 showObstacles1(ob3);
-            }
+            }*/
             gotoxy(road[k][2], j);
             printf("*");
         }
@@ -183,7 +240,7 @@ void show_road() {
             k = k % degree;
             gotoxy(road[k][0], j);
             printf(" ");
-            if (road[k][1] == 1) {
+            /*if (road[k][1] == 1) {
                 gotoxy(road[k][0] + ob1.x, j);
                 deleteObstacles1(ob1);
             }
@@ -194,7 +251,41 @@ void show_road() {
             else if (road[k][1] == 3) {
                 gotoxy(road[k][0] + ob3.x, j);
                 deleteObstacles1(ob3);
+            }*/
+            tmp = road[k][1];
+            switch (tmp) {
+            case 0:  break;
+            case 1:  gotoxy(road[k][0] + ob1[0].x, j);
+                     deleteObstacles1();
+                     break;
+            case 2:  gotoxy(road[k][0] + ob1[1].x, j);
+                     deleteObstacles1();
+                     break;
+            case 3:  gotoxy(road[k][0] + ob1[2].x, j);
+                     deleteObstacles1();
+                     break;
+            case 4:  gotoxy(road[k][0] + ob2[0].x, j);
+                     deleteObstacles1();
+                     break;
+            case 5:  gotoxy(road[k][0] + ob2[1].x, j);
+                     deleteObstacles1();
+                     break;
+            case 6:  gotoxy(road[k][0] + ob2[2].x, j);
+                     deleteObstacles1();
+                     break;
+            case 7:  gotoxy(road[k][0] + ob3[0].x, j);
+                     deleteObstacles1();
+                     break;
+            case 8:  gotoxy(road[k][0] + ob3[1].x, j);
+                     deleteObstacles1();
+                     break;
+            case 9:  gotoxy(road[k][0] + ob3[2].x, j);
+                     deleteObstacles1();
+                     break;
+            default:
+                break;
             }
+
             gotoxy(road[k][2], j);
             printf(" ");
         }
