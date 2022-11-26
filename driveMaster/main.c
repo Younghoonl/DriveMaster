@@ -68,7 +68,7 @@ clock_t itemTimeEnd;
 int tmpCycle[8] = { 0,315,270,225,180,135,90,45 };
 int tmpC = 0;
 
-int lines = 45;
+int lines = 43;
 int cols = 150;
 
 typedef struct ObstacleStruct {
