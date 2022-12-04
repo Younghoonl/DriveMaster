@@ -7,6 +7,7 @@
 #include <math.h>
 #include <conio.h>
 #include <stdbool.h>
+#include "Items.h"
 
 // score --> time
 // 물약 아이템
@@ -48,8 +49,9 @@
 #define OB7 71
 #define OB8 111
 #define OB9 151
-
-#define ITEM 173
+ 
+#define ITEM1 187 // 좋은 아이템
+#define ITEM2 137 // 나쁜 아이템
 
 int flag = 0;
 double road[360][3];
@@ -72,12 +74,13 @@ char userName[30];
 int score = 0;
 double speed = 100.0;
 int carNumber = 0;
-int item = 0; // 현재 아이템
+int item = 2; // 현재 아이템
 int heart = 6; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
 extern double carSpeed;
 extern double tmpSpeed;
+extern int tmpHeart;
 
 clock_t itemTimeStart = 0;
 clock_t itemTimeEnd = 0;
@@ -114,7 +117,10 @@ void setRoad() {
     int obNum;
 
     for (int i = 0; i < 360; i++) {
-        if (i % ITEM == 0 && i!=0)     road[i][1] = 10;    //item 
+        if (i % ITEM1 == 0 && i!=0)     
+            road[i][1] = 10;    // 좋은 item 
+        else if (i % ITEM2 == 0 && i != 0)
+            road[i][1] = 11;    // 나쁜 item 
         else if (i % OB1 == 0) road[i][1] = 1;
         else if (i % OB2 == 0) road[i][1] = 2;
         else if (i % OB3 == 0) road[i][1] = 3;
@@ -192,7 +198,7 @@ void show_road() {
     
 
     int roadPos = tmpCycle[tmpC] + curPosY;
-
+    int tmpk = 0;
     
     int degree = 360;
     while (1) {
@@ -208,6 +214,7 @@ void show_road() {
             int obstacleX = 0;
             int itemX = 0;
             tmp = road[k][1];
+            int tmpX;
 
             switch (tmp) {
             case 0:  break;
@@ -247,14 +254,38 @@ void show_road() {
                      showObstacles1(ob3[2]);
                      obstacleX = road[k][0] + ob3[2].x;
                      break;
-            case 10: gotoxy(road[k][0] + it.x, j);
-                     showItem(it);
-                     itemX = road[k][0] + it.x;
+                     
+            case 10: 
+                     itemX = road[k][0] + 7;
+                     if (tmpk > 0) {
+                         itemX = road[k][0] + 7;
+                     }
+                     tmpX = itemX;
+                     textcolor(BLACK, YELLOW);
+                     for (int i = 0; i < 5; i++) {
+                         gotoxy(tmpX + i * 7, j);
+                         printf("%s", itemIcon);
+                     }
+                     textcolor(WHITE, BLACK);
+                     
                      break;
+            case 11: itemX = road[k][0] + 7;
+                    if (tmpk > 0) {
+                        itemX = road[k][0] + 7;
+                    }
+                    tmpX = itemX;
+                    textcolor(WHITE, LIGHTRED);
+                    for (int i = 0; i < 5; i++) {
+                        gotoxy(tmpX + i*7, j);
+                        
+                        printf("%s", itemIcon);
+                    }
+                    textcolor(WHITE, BLACK);
+                    break;
             default:
                 break;
             }
-
+            //obstacle collision
             if ((tmp>=1&&tmp<=9) && k==roadPos) {
                 flag = 0;
                 int p = (obstacleX - curPosX);
@@ -267,8 +298,9 @@ void show_road() {
                     }
                 }
             }
-            if (tmp == 10 && k == roadPos) {
-                item = rand()%3+1;
+            
+            if ((tmp == 10 || tmp==11 )&& k == roadPos) {
+                item = rand()%4+1;
                 gameBoardInfo();
                 if (item == 1) {
                     // key 변환
@@ -277,6 +309,7 @@ void show_road() {
                     itemTimeStart = clock();
                 }
             }
+            
             gotoxy(road[k][2], j);
             textcolor(GREEN, BLACK);
             printf("*");
@@ -285,7 +318,7 @@ void show_road() {
         }
 
         Sleep(speed);
-        deleteItem(it);
+       
         for (k = degree - road_idx, j = 0; j < 45; j++, k++) {
             k = k % degree;
             gotoxy(road[k][0], j);
@@ -320,9 +353,23 @@ void show_road() {
             case 9:  gotoxy(road[k][0] + ob3[2].x, j);
                      deleteObstacles1();
                      break;
-            case 10: gotoxy(road[k][0] + it.x, j);
-                     deleteItem();
-                     break;
+            case 10: 
+               
+                for (int i = 0; i < 5; i++) {
+                    gotoxy(road[k][0] + 7 + i * 7, j);
+                    
+                  
+                    printf("  ", itemIcon);
+                }
+                break;
+            case 11: 
+                for (int i = 0; i < 5; i++) {
+                    gotoxy(road[k][0] + 7 + i * 7, j);
+
+                    printf("  ", itemIcon);
+                }
+                break;
+
             default:
                 break;
             }
@@ -342,6 +389,9 @@ void show_road() {
         }
 
         itemTimeEnd = clock();
+        if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 1.0 && using == true && item == 4) {
+            item = 0;
+        }
         if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 5.0 && using == true) {
             if (BoostChange == true) {
                 if (carNumber == 0) {
@@ -376,6 +426,7 @@ void show_road() {
         if (road_idx > degree) {
             road_idx = 0;
             it.x = road[1][0];
+            tmpk++;
         }
 
         if (heart == 0) {

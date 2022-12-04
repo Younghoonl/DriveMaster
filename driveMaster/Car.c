@@ -13,6 +13,7 @@ extern int curPosY;
 extern int carNumber;
 extern char car[4][5][9];
 extern double road[360][3];
+extern int item;
 
 typedef struct ObstacleStruct {
     int rN;
@@ -127,6 +128,7 @@ void ProcessKeyInPut(int roadPos) {
             break;
         case SPACE:
             useItem();
+            
             itemTimeStart = clock();
             break;
         default:

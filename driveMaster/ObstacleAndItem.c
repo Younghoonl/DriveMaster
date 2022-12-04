@@ -1,4 +1,4 @@
-#include "Items.h"
+
 #include <Windows.h>
 #include <stdbool.h>
 #include <time.h>
@@ -7,6 +7,14 @@
 #define RED 4
 #define YELLOW 14 
 #define WHITE 15 
+
+
+char Obstacles[10][9] = {
+    "ⅹ∀ⅹ",
+    "ⅹ㉧ⅹ",
+    "ⅹωⅹ",
+    "      ",
+};
 
 extern double road[360][3];
 extern int item;
@@ -17,10 +25,19 @@ bool CarChange = false;
 extern double speed;
 extern double carSpeed;
 extern int carNumber;
-
+extern int heart;
+extern int tmpHeart;
 extern clock_t itemTimeStart;
 extern clock_t itemTimeEnd;
 
+static int gotoxy(int x, int y) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos;
+    pos.Y = y;
+    pos.X = x;
+    SetConsoleCursorPosition(hConsole, pos);
+    return 0;
+}
 
 typedef struct ObstacleStruct {
     int rN; // randomNumber
@@ -49,16 +66,14 @@ void deleteObstacles1() {
     printf("%s", Obstacles[3]);
 }
 
+/*
+void showItem(itemStruct it , int x, int y) {
 
-void showItem(itemStruct it) {
-  
-    for (int i = 0; i < 4; i++) {
-        textcolor(YELLOW, BLACK);
-        if(i < 3) printf("%s      ", itemIcon); // space 7개
-        else      printf("%s", itemIcon);
+    for (int i = 0; i < 5; i++) {
+        gotoxy(x, y);
+        x += 5;
+        printf("%s", itemIcon);
     }
-    textcolor(WHITE, BLACK);
- 
 }
 
 void deleteItem() {
@@ -66,6 +81,7 @@ void deleteItem() {
     printf("                             ");
    
 }
+*/
 
 
 // 아이템 사용 함수
@@ -77,6 +93,7 @@ void useItem() {
     * item 2 : 부스터
     * item 3 : 자동차 변환
     */
+    
     if (item == 0) {
         return; // 아무 일도 일어나지 않음
     }
@@ -87,12 +104,18 @@ void useItem() {
     else if (item == 2) {
         // 부스터
         BoostChange = true;
-        speed /=10;
+        speed /= 10;
         carSpeed += 22.5;
     }
     else if (item == 3) {
         CarChange = true;
         carNumber = 4;
+    }
+    else if (item == 4) {
+        if ((heart + 1) <= tmpHeart) {
+            heart += 1;
+        
+        }
     }
     
     using = true;
