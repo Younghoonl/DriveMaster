@@ -53,6 +53,8 @@
 #define ITEM1 187 // 좋은 아이템
 #define ITEM2 137 // 나쁜 아이템
 
+#define POTION 20 // 물약
+
 int flag = 0;
 double road[360][3];
 
@@ -100,6 +102,14 @@ typedef struct ItemStruct {
     int x, y;
 }itemStruct;
 
+char potions[5][10] = {
+  " ♡  ♡ ",
+  "♡♡♡♡",
+  " ♡♡♡ ",
+  "   ♡   ",
+  "        "
+};
+
 
 int gotoxy(int x, int y) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -133,6 +143,7 @@ void setRoad() {
         else  road[i][1] = 0;
     }
     
+    road[POTION][1] = 12;
 
     for (int i = 0; i < 90; i++)
     {
@@ -196,9 +207,10 @@ void show_road() {
     itemStruct it;
     it.x = 7;
     
+    int potionX;
 
     int roadPos = tmpCycle[tmpC] + curPosY;
-    int tmpk = 0;
+
     
     int degree = 360;
     while (1) {
@@ -216,7 +228,7 @@ void show_road() {
             tmp = road[k][1];
             int tmpX;
 
-            switch (tmp) {
+            switch (tmp) { // 
             case 0:  break;
             case 1:  gotoxy(road[k][0] + ob1[0].x, j);
                      showObstacles1(ob1[0]);
@@ -257,9 +269,7 @@ void show_road() {
                      
             case 10: 
                      itemX = road[k][0] + 7;
-                     if (tmpk > 0) {
-                         itemX = road[k][0] + 7;
-                     }
+                     
                      tmpX = itemX;
                      textcolor(BLACK, YELLOW);
                      for (int i = 0; i < 5; i++) {
@@ -270,9 +280,7 @@ void show_road() {
                      
                      break;
             case 11: itemX = road[k][0] + 7;
-                    if (tmpk > 0) {
-                        itemX = road[k][0] + 7;
-                    }
+                   
                     tmpX = itemX;
                     textcolor(WHITE, LIGHTRED);
                     for (int i = 0; i < 5; i++) {
@@ -282,6 +290,18 @@ void show_road() {
                     }
                     textcolor(WHITE, BLACK);
                     break;
+            case 12:
+                potionX = road[POTION][0] + 20;
+                gotoxy(potionX, j);
+                printf("%s", potions[0]);
+                gotoxy(potionX, j+1);
+                printf("%s", potions[1]);
+                gotoxy(potionX, j+2);
+                printf("%s", potions[2]);
+                gotoxy(potionX, j+3);
+                printf("%s", potions[3]);
+                break;
+
             default:
                 break;
             }
@@ -369,6 +389,17 @@ void show_road() {
                     printf("  ", itemIcon);
                 }
                 break;
+            case 12:
+                potionX = road[POTION][0] + 20;
+                gotoxy(potionX, j);
+                printf("%s", potions[4]);
+                gotoxy(potionX, j + 1);
+                printf("%s", potions[4]);
+                gotoxy(potionX, j + 2);
+                printf("%s", potions[4]);
+                gotoxy(potionX, j + 3);
+                printf("%s", potions[4]);
+                break;
 
             default:
                 break;
@@ -426,7 +457,6 @@ void show_road() {
         if (road_idx > degree) {
             road_idx = 0;
             it.x = road[1][0];
-            tmpk++;
         }
 
         if (heart == 0) {
