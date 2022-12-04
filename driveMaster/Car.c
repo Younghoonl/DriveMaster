@@ -7,6 +7,8 @@
 #define LEFT 75
 #define RIGHT 77
 #define SPACE 32
+#define XX 120
+#define Z 122
 
 extern int curPosX;
 extern int curPosY;
@@ -130,6 +132,32 @@ void ProcessKeyInPut(int roadPos) {
             useItem();
             
             itemTimeStart = clock();
+            break;
+        case XX:
+            if (detectcollisionRoad(roadPos) == 1) {
+                return;
+            }
+            if (LeftRightChange == false) {
+                ShiftRight();
+                ShiftRight();
+                ShiftRight();
+            }
+            else {
+                ShiftLeft();
+            }
+            break;
+        case Z:
+            if (detectcollisionRoad(roadPos) == 1) {
+                return;
+            }
+            if (LeftRightChange == false) {
+                ShiftLeft();
+                ShiftLeft();
+                ShiftLeft();
+            }
+            else {
+                ShiftRight();
+            }
             break;
         default:
             break;

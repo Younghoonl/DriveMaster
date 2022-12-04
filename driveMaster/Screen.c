@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include <stdio.h>
 
@@ -10,15 +10,15 @@ extern int carNumber;
 extern char car[4][5][9];
 extern int score;
 extern double speed;
-extern int item; // ���� ������
-extern int heart; // �ʱ� ���
+extern int item; // 현재 아이템
+extern int heart; // 초기 목숨
 extern int gameTime;
 extern int tmpCarNumber;
 extern char Itemshape[3][3][15];
 
 int tmpHeart;
-double carSpeed; // �����ֱ� �� ���ǵ�
-double tmpSpeed; // ������ ���ǵ�
+double carSpeed; // 보여주기 식 스피드
+double tmpSpeed; // 최초의 스피드
 
 
 void SetCurrentCursorPos(int x, int y) {
@@ -36,6 +36,8 @@ COORD GetCurrentCursorPos(void) {
 
     return curPoint;
 }
+
+
 
 void gameBoardInfo() {
     int x, y;
@@ -83,17 +85,17 @@ void gameBoardInfo() {
     SetCurrentCursorPos(x, y + 11);
     printf("HEART ");
     for (int i = 0; i < heart; i++) {
-        printf("��");
+        printf("♥");
     }
     for (int i = tmpHeart; i > heart; i--) {
-        printf("��");
+        printf("♡");
     }
     SetCurrentCursorPos(x, y + 13);
     printf("SCORE : %d", gameTime);
 }
 
 int gameInfoSelect() {
-    /* ���� �̸�, �ڵ��� ���� */
+    /* 유저 이름, 자동차 선택 */
     int x = 32;
     int y = 8;
     int ScreenX, ScreenY;
@@ -118,12 +120,12 @@ int gameInfoSelect() {
     }
     SetCurrentCursorPos(41, 20);
     for (int i = 0; i < 30; i++) {
-        printf("��");
+        printf("〓");
     }
 
     SetCurrentCursorPos(38, 7);
     for (int i = 0; i < 34; i++) {
-        printf("��");
+        printf("〓");
     }
 
     int curPosX = 50;
@@ -137,9 +139,9 @@ int gameInfoSelect() {
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
     printf("[1]");
     SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 2);
-    printf("�ӷ� : 100.0km/s");
+    printf("속력 : 100.0km/s");
     SetCurrentCursorPos(curPosX + x - 12, curPosY + y + 4);
-    printf("HEART : ������������");
+    printf("HEART : ♥♥♥♥♥♥");
     
     curPosX += 30;
     for (y = 0; y < 5; y++) {
@@ -151,20 +153,20 @@ int gameInfoSelect() {
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
     printf("[2]");
     SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 2);
-    printf("�ӷ� : 80.0km/s");
+    printf("속력 : 80.0km/s");
     SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 4);
-    printf("HEART ��������");
+    printf("HEART ♥♥♥♥");
     
     SetCurrentCursorPos(60, 7);
-    printf("[������ �Է��ϼ���!]");
+    printf("[정보를 입력하세요!]");
     SetCurrentCursorPos(63, 20);
-    printf("[�ڵ��� ����]");
+    printf("[자동차 종류]");
     x = 38;
     y = 11;
     SetCurrentCursorPos(x, y);
-    printf("�̸� : ");
+    printf("이름 : ");
     SetCurrentCursorPos(x, y + 3);
-    printf("�ڵ��� (1, 2 �� ����) : ");
+    printf("자동차 (1, 2 중 선택) : ");
     SetCurrentCursorPos(x + 7, y);
     scanf("%s", &userName);
     SetCurrentCursorPos(x + 25, y + 3);
@@ -224,15 +226,15 @@ void initScreen() {
 
     SetCurrentCursorPos(41, 6);
     for (int i = 0; i < 30; i++) {
-        printf("��");
+        printf("〓");
     }
     SetCurrentCursorPos(41, 16);
     for (int i = 0; i < 30; i++) {
-        printf("��");
+        printf("〓");
     }
     
 
-    /* ���� �̸� start ��ư ����  */
+    /* 게임 이름 start 버튼 생성  */
     
     int x = 32;
     int y = 6;
@@ -255,7 +257,7 @@ void initScreen() {
     Sleep(100);
     SetCurrentCursorPos(x+16, y + 13);
     //Sleep(1000);
-    printf("**�� �� �� �� ��**");
+    printf("**운 전 의 달 인**");
     SetCurrentCursorPos(x+30, 16);
     int curPosX = 43;
     int curPosY = 24;
@@ -289,6 +291,24 @@ void initScreen() {
             printf("%c", car[3][y][x]);
         }
     }
+    curPosX = 18;
+    curPosY = 24;
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒▒▒▒▒▒▒▒▒▒▒▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒▒▒■▒▒■▒▒▒▒▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒▒▒■▒▒■▒▒▒▒▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒▒▒▒▒▒▒▒▒▒▒▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒■▒▒▒▒▒▒▒▒■▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒■■■■■▒▒");
+    SetCurrentCursorPos(curPosX, curPosY++);
+    printf("▒▒▒▒▒▒▒▒▒▒▒▒");
+    
+
 }
 
 void eraseScreen() {
@@ -302,7 +322,7 @@ void eraseScreen() {
 
 
 void countMotion() {
-    /* ���� ���� �� READY 3 - 2 - 1 ��� */
+    /* 게임 시작 전 READY 3 - 2 - 1 재생 */
     int x, y;
     x = 52;
     y = 15;
@@ -399,27 +419,30 @@ void countMotion() {
 
 
 void gameOver(int score) {
-    int x = 58;
-    int y = 15;
-    SetCurrentCursorPos(x, y);
-    for (int i = 0; i < 28; i++) {
-        printf("*");
-        Sleep(5);
-    }
-
-    SetCurrentCursorPos(x, y+8);
-    for (int i = 0; i < 28; i++) {
-        printf("*");
-        Sleep(5);
-    }
-
-    SetCurrentCursorPos(x+8, y+2);
-    printf("game over!");
-    SetCurrentCursorPos(x+6, y+4);
-    printf("�ٽ� �����ϼ���!");
-    SetCurrentCursorPos(x+2, y+6);
-    printf("����� ���� : %d", gameTime);
-
-    SetCurrentCursorPos(x, y+10);
-
+    
+    int x = 40;
+    int y = 10;
+    SetCurrentCursorPos(x, y++);
+    printf("￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣");
+    SetCurrentCursorPos(x, y++);
+    printf("|　DRIVE MASTER　　　　　　　　　　　　　　　　　　　[－][口][×] |");
+    SetCurrentCursorPos(x, y++);
+    printf("|￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣  ￣￣￣￣￣￣|");
+    SetCurrentCursorPos(x, y++);
+    printf("|　 GAME OVER!                                            　　　 |");
+    SetCurrentCursorPos(x, y++);
+    printf("|　 다시 도전하세요!                                      　　　 |");
+    SetCurrentCursorPos(x, y++);
+    printf("|　 당신의 점수는 ?                                       　　　 |");
+    SetCurrentCursorPos(x, y++);
+    printf("|　　　　＿＿＿＿＿＿　　　          ＿＿＿＿＿＿           　　　|");
+    SetCurrentCursorPos(x, y++);
+    printf("| 　　　｜   %d    |　              ｜   종료    |　              |", gameTime);
+    SetCurrentCursorPos(x, y++);
+    printf("|　　　　￣￣￣￣￣￣　　　          ＿＿＿＿＿＿             　|");
+    SetCurrentCursorPos(x, y++);
+    printf("￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣");
+    Sleep(1000);
+    SetCurrentCursorPos(50, 50);
+    
 }

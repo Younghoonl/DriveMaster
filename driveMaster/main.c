@@ -40,20 +40,20 @@
 #define YELLOW 14 
 #define WHITE 15 
 
-#define OB1 33
-#define OB2 73
+#define OB1 67
+#define OB2 91
 #define OB3 141
 #define OB4 59
-#define OB5 41
+#define OB5 81
 #define OB6 131
 #define OB7 71
 #define OB8 111
 #define OB9 151
  
 #define ITEM1 187 // 좋은 아이템
-#define ITEM2 137 // 나쁜 아이템
+#define ITEM2 79 // 
 
-#define POTION 20 // 물약
+#define POTION 80 // 물약
 
 int flag = 0;
 double road[360][3];
@@ -76,7 +76,7 @@ char userName[30];
 int score = 0;
 double speed = 100.0;
 int carNumber = 0;
-int item = 2; // 현재 아이템
+int item = 0; // 현재 아이템
 int heart = 6; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
@@ -292,6 +292,7 @@ void show_road() {
                     break;
             case 12:
                 potionX = road[POTION][0] + 20;
+                textcolor(LIGHTBLUE, BLACK);
                 gotoxy(potionX, j);
                 printf("%s", potions[0]);
                 gotoxy(potionX, j+1);
@@ -300,6 +301,7 @@ void show_road() {
                 printf("%s", potions[2]);
                 gotoxy(potionX, j+3);
                 printf("%s", potions[3]);
+                textcolor(WHITE, BLACK);
                 break;
 
             default:
@@ -318,7 +320,7 @@ void show_road() {
                     }
                 }
             }
-            
+            // item collision
             if ((tmp == 10 || tmp==11 )&& k == roadPos) {
                 item = rand()%4+1;
                 gameBoardInfo();
@@ -327,6 +329,17 @@ void show_road() {
                     using = true;
                     LeftRightChange = true;
                     itemTimeStart = clock();
+                }
+            }
+            // potion collision
+            if (tmp == 12 && k == roadPos) {
+                int p = (potionX - curPosX);
+                p = p > 0 ? p : -p;
+                if (p < 5) {
+                    if ((heart + 1) <= tmpHeart) {
+                        heart += 1;
+
+                    }
                 }
             }
             
@@ -470,28 +483,32 @@ int main() {
     system(command);
     RemoveCursor();
 
+    int re;
+
     initScreen();
     int key;
     key = _getch();
     eraseScreen();
     carNumber = gameInfoSelect();
 
-    eraseScreen();
-    countMotion();
-    eraseScreen();
+        eraseScreen();
+        countMotion();
+        eraseScreen();
+        
+        gameBoardInfo();
+        
+        SetCurrentCursorPos(curPosX, curPosY);
+        start = clock();
 
-    gameBoardInfo();
+        showCar(car[carNumber]);
+        setRoad();
+        show_road();
+        
+        eraseScreen();
+        gameOver(score);
+        Sleep(1500);
+        eraseScreen();
 
-    SetCurrentCursorPos(curPosX, curPosY);
-    start = clock();
-
-    showCar(car[carNumber]);
-    setRoad();
-    show_road();
-
-    eraseScreen();
-    gameOver(score);
-    key = _getch();
-
+    
 
 }
