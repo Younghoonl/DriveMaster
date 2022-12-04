@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <stdio.h>
 
-
 #define GBOARD_WIDTH 150
 #define GBOARD_HEIGHT 40
 
@@ -10,12 +9,17 @@ extern char userName[30];
 extern int carNumber;
 extern char car[4][5][9];
 extern int score;
-extern int speed;
+extern double speed;
 extern int item; // 현재 아이템
 extern int heart; // 초기 목숨
 extern int gameTime;
 extern int tmpCarNumber;
 extern char Itemshape[3][3][15];
+
+int tmpHeart;
+double carSpeed; // 보여주기 식 스피드
+double tmpSpeed; // 최초의 스피드
+
 
 void SetCurrentCursorPos(int x, int y) {
     COORD position = { x, y };
@@ -73,19 +77,19 @@ void gameBoardInfo() {
     SetCurrentCursorPos(x, y + 7);
     printf("----------");
     SetCurrentCursorPos(x, y + 9);
-    printf("SPEED : %d    ", speed);
+    printf("SPEED : %.1lfkm/s    ", carSpeed);
     SetCurrentCursorPos(x, y + 11);
-    printf("SCORE : %d     ", score);
-    SetCurrentCursorPos(x, y + 13);
+    //printf("SCORE : %d     ", score);
+    SetCurrentCursorPos(x, y + 11);
     printf("HEART ");
     for (int i = 0; i < heart; i++) {
         printf("♥");
     }
-    for (int i = 5; i > heart; i--) {
+    for (int i = tmpHeart; i > heart; i--) {
         printf("♡");
     }
-    SetCurrentCursorPos(x, y + 15);
-    printf("TIME : %d", gameTime);
+    SetCurrentCursorPos(x, y + 13);
+    printf("SCORE : %d", gameTime);
 }
 
 int gameInfoSelect() {
@@ -122,7 +126,7 @@ int gameInfoSelect() {
         printf("〓");
     }
 
-    int curPosX = 43;
+    int curPosX = 50;
     int curPosY = 24;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
@@ -132,16 +136,12 @@ int gameInfoSelect() {
     }
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
     printf("[1]");
-    curPosX += 15;
-    for (y = 0; y < 5; y++) {
-        for (x = 0; x < 8; x++) {
-            SetCurrentCursorPos(curPosX + x, curPosY + y);
-            printf("%c", car[1][y][x]);
-        }
-    }
-    SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
-    printf("[2]");
-    curPosX += 15;
+    SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 2);
+    printf("속력 : 100.0km/s");
+    SetCurrentCursorPos(curPosX + x - 12, curPosY + y + 4);
+    printf("HEART : ♥♥♥♥♥♥");
+    
+    curPosX += 30;
     for (y = 0; y < 5; y++) {
         for (x = 0; x < 8; x++) {
             SetCurrentCursorPos(curPosX + x, curPosY + y);
@@ -149,16 +149,12 @@ int gameInfoSelect() {
         }
     }
     SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
-    printf("[3]");
-    curPosX += 15;
-    for (y = 0; y < 5; y++) {
-        for (x = 0; x < 8; x++) {
-            SetCurrentCursorPos(curPosX + x, curPosY + y);
-            printf("%c", car[3][y][x]);
-        }
-    }
-    SetCurrentCursorPos(curPosX + x - 4, curPosY + y + 0.5);
-    printf("[4]");
+    printf("[2]");
+    SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 2);
+    printf("속력 : 80.0km/s");
+    SetCurrentCursorPos(curPosX + x - 10, curPosY + y + 4);
+    printf("HEART ♥♥♥♥");
+    
     SetCurrentCursorPos(60, 7);
     printf("[정보를 입력하세요!]");
     SetCurrentCursorPos(63, 20);
@@ -168,16 +164,25 @@ int gameInfoSelect() {
     SetCurrentCursorPos(x, y);
     printf("이름 : ");
     SetCurrentCursorPos(x, y + 3);
-    printf("자동차 (1~4 중 선택) : ");
+    printf("자동차 (1, 2 중 선택) : ");
     SetCurrentCursorPos(x + 7, y);
     scanf("%s", &userName);
     SetCurrentCursorPos(x + 25, y + 3);
     scanf("%d", &carNumber);
-    if (carNumber > 5) {
-        carNumber = 1;
+    if (carNumber != 2) {
+        carNumber = 0;
+        heart = 6;
+        speed = 90;
+        carSpeed = 100.0;
     }
-    carNumber--;
+    else {
+        heart = 4;
+        speed = 120;
+        carSpeed = 80.0;
+    }
+    tmpHeart = heart;
     tmpCarNumber = carNumber;
+    tmpSpeed = speed;
     return carNumber;
 }
 
@@ -413,7 +418,7 @@ void gameOver(int score) {
     SetCurrentCursorPos(x+6, y+4);
     printf("다시 도전하세요!");
     SetCurrentCursorPos(x+2, y+6);
-    printf("당신의 점수 : ", score);
+    printf("당신의 점수 : %d", gameTime);
 
     SetCurrentCursorPos(x, y+10);
 

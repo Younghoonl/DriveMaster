@@ -8,6 +8,18 @@
 #include <conio.h>
 #include <stdbool.h>
 
+// score --> time
+// 물약 아이템
+
+// 스테이지 만들기
+// 중간에 난이도 업
+// 아이템 나오는 빈도 수를 늘리고, 아이템 3개씩 나오게 함
+// 첫번째 자동차 속도 100 --> 10 --> 1
+// 두번째 자동차 속도 80 --> 8 -> 1
+// BGM
+// PPT
+
+
 #define COMMAND_SIZE 256
 
 #define BLACK 0 
@@ -58,12 +70,14 @@ clock_t end;
 
 char userName[30];
 int score = 0;
-int speed = 100;
+double speed = 100.0;
 int carNumber = 0;
 int item = 0; // 현재 아이템
-int heart = 5; // 초기 목숨
+int heart = 6; // 초기 목숨
 int gameTime = 0;
 int tmpCarNumber;
+extern double carSpeed;
+extern double tmpSpeed;
 
 clock_t itemTimeStart = 0;
 clock_t itemTimeEnd = 0;
@@ -329,11 +343,22 @@ void show_road() {
 
         itemTimeEnd = clock();
         if ((double)(itemTimeEnd - itemTimeStart) / CLOCKS_PER_SEC >= 5.0 && using == true) {
+            if (BoostChange == true) {
+                if (carNumber == 0) {
+                    carSpeed = 105.4;
+                }
+                else {
+                    carSpeed = 85.4;
+                }
+            }
+            
             LeftRightChange = false;
             BoostChange = false;
             CarChange = false;
-            speed = 100;
+            speed = tmpSpeed;
             carNumber = tmpCarNumber;
+            
+            
             item = 0;
             using = false;
         }
@@ -353,8 +378,8 @@ void show_road() {
             it.x = road[1][0];
         }
 
-        if (gameTime >= 100) {
-            return;
+        if (heart == 0) {
+            break;
         }
     }
 }
@@ -364,14 +389,14 @@ int main() {
     system(command);
     RemoveCursor();
 
-    //initScreen();
+    initScreen();
     int key;
-    //key = _getch();
-    //eraseScreen();
-    //carNumber = gameInfoSelect();
+    key = _getch();
+    eraseScreen();
+    carNumber = gameInfoSelect();
 
     eraseScreen();
-    //countMotion();
+    countMotion();
     eraseScreen();
 
     gameBoardInfo();

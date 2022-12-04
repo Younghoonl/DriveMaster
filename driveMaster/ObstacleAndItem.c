@@ -14,7 +14,8 @@ extern bool LeftRightChange;
 extern bool using;
 bool BoostChange = false;
 bool CarChange = false;
-extern int speed;
+extern double speed;
+extern double carSpeed;
 extern int carNumber;
 
 extern clock_t itemTimeStart;
@@ -37,7 +38,6 @@ void textcolor(int foreground, int background)
 }
 
 
-
 void showObstacles1(obstacle ob) {
     
     textcolor(RED, BLACK);
@@ -45,12 +45,8 @@ void showObstacles1(obstacle ob) {
     textcolor(WHITE, BLACK);
 }
 
-
-
 void deleteObstacles1() {
-
     printf("%s", Obstacles[3]);
-
 }
 
 
@@ -91,7 +87,8 @@ void useItem() {
     else if (item == 2) {
         // ∫ŒΩ∫≈Õ
         BoostChange = true;
-        speed = 5;
+        speed /=10;
+        carSpeed += 22.5;
     }
     else if (item == 3) {
         CarChange = true;
